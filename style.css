@@ -1,0 +1,7 @@
+#run-script-panel {
+  padding: 10px;
+}
+#run-script-status {
+  color: green;
+  font-weight: bold;
+}
