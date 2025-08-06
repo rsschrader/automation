@@ -18,8 +18,8 @@ function attachScriptRunnerButtonListener() {
 			})
 				.then(response => response.json())
 				.then(data => {
-					messageBox.innerText = data.message || "Action completed!";
-					messageBox.style.color = "green";
+					//messageBox.innerText = data.message || "Action completed!";
+					//messageBox.style.color = "green";
 					
 					messageBox.innerText = JSON.stringify(data, null, 2); // Prettified JSON
           			messageBox.style.whiteSpace = "pre-wrap"; // preserve line breaks
