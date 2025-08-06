@@ -4,8 +4,8 @@ function attachScriptRunnerButtonListener() {
 
   if (button) {
     button.addEventListener("click", function () {
-      fetch('/rest/scriptrunner/latest/custom/run-my-custom-script?issueKey=${issue.key}', {
-        method: 'POST',
+      fetch('https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/ping', {
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json'
         }
