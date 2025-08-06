@@ -4,6 +4,12 @@ function attachScriptRunnerButtonListener() {
 
 	if (button) {
 		button.addEventListener("click", function() {
+			const issueKey = window.AdaptavistBridgeContext?.context?.issueKey;
+			if (issueKey) {
+			  console.log("Issue key is:", issueKey);
+			} else {
+			  console.error("Issue key not found. Are you inside a ScriptRunner Cloud webPanel?");
+			}
 			fetch('https://jsonplaceholder.typicode.com/posts/1', {
 				method: 'GET',
 				headers: {
