@@ -1,19 +1,23 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const btn = document.getElementById("run-script-btn");
-  const statusDiv = document.getElementById("run-script-status");
+  const button = document.getElementById("run-custom-script");
+  const messageBox = document.getElementById("script-response-message");
 
-  btn.addEventListener("click", function () {
-    statusDiv.textContent = "Running...";
-
-    AP.request({
-      url: "/rest/scriptrunner/latest/custom/my-custom-endpoint",
-      type: "GET",
-      success: function () {
-        statusDiv.textContent = "Script completed ✅";
-      },
-      error: function () {
-        statusDiv.textContent = "Script failed ❌";
-      }
+  if (button) {
+    button.addEventListener("click", function () {
+      fetch('/rest/scriptrunner/latest/custom/run-my-custom-script?issueKey=${issue.key}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => response.json())
+        .then(data => {
+          messageBox.innerText = data.message || "Action completed!";
+        })
+        .catch(error => {
+          messageBox.innerText = "Error: " + error;
+          messageBox.style.color = "red";
+        });
     });
-  });
+  }
 });
