@@ -10,7 +10,7 @@ function attachScriptRunnerButtonListener() {
 			} else {
 			  console.error("Issue key not found. Are you inside a ScriptRunner Cloud webPanel?");
 			}
-			fetch('https://httpbin.org/get?issueKey=${issueKey}', {
+			fetch('https://httpbin.org/get?issueKey=' + issueKey, {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json'
@@ -22,7 +22,7 @@ function attachScriptRunnerButtonListener() {
 					//messageBox.style.color = "green";
 					
 					messageBox.innerText = JSON.stringify(data, null, 2); // Prettified JSON
-          			messageBox.style.whiteSpace = "pre-wrap"; // preserve line breaks
+          			//messageBox.style.whiteSpace = "pre-wrap"; // preserve line breaks
           			messageBox.style.color = "black";
 				})
 				.catch(error => {
