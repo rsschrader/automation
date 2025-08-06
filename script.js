@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+function attachScriptRunnerButtonListener() {
   const button = document.getElementById("run-custom-script");
   const messageBox = document.getElementById("script-response-message");
 
@@ -13,11 +13,17 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(response => response.json())
         .then(data => {
           messageBox.innerText = data.message || "Action completed!";
+          messageBox.style.color = "green";
         })
         .catch(error => {
           messageBox.innerText = "Error: " + error;
           messageBox.style.color = "red";
         });
     });
+  } else {
+    // Retry after a short delay
+    setTimeout(attachScriptRunnerButtonListener, 200);
   }
-});
+}
+
+document.addEventListener("DOMContentLoaded", attachScriptRunnerButtonListener);
