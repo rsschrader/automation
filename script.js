@@ -10,7 +10,7 @@ function attachScriptRunnerButtonListener() {
 			} else {
 			  console.error("Issue key not found. Are you inside a ScriptRunner Cloud webPanel?");
 			}
-			fetch('https://jsonplaceholder.typicode.com/posts/1', {
+			fetch('https://httpbin.org/get?issueKey=${issueKey}', {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json'
@@ -20,6 +20,10 @@ function attachScriptRunnerButtonListener() {
 				.then(data => {
 					messageBox.innerText = data.message || "Action completed!";
 					messageBox.style.color = "green";
+					
+					messageBox.innerText = JSON.stringify(data, null, 2); // Prettified JSON
+          			messageBox.style.whiteSpace = "pre-wrap"; // preserve line breaks
+          			messageBox.style.color = "black";
 				})
 				.catch(error => {
 					messageBox.innerText = "Error: " + error;
