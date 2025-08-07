@@ -10,28 +10,33 @@ function attachScriptRunnerButtonListener() {
 			} else {
 			  console.error("Issue key not found. Are you inside a ScriptRunner Cloud webPanel?");
 			}
+
+			messageBox.innerText = "Calling API...";
+			messageBox.style.color = "gray";
+
 			fetch('https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/ping', {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json'
 				}
 			})
-				.then(response => response.json())
-				.then(data => {
-					//messageBox.innerText = data.message || "Action completed!";
-					//messageBox.style.color = "green";
-					
-					messageBox.innerText = JSON.stringify(data, null, 2); // Prettified JSON
-          			//messageBox.style.whiteSpace = "pre-wrap"; // preserve line breaks
-          			messageBox.style.color = "black";
-				})
-				.catch(error => {
-					messageBox.innerText = "Error: " + error;
-					messageBox.style.color = "red";
-				});
+			.then(response => {
+				if (!response.ok) {
+					throw new Error(`HTTP error ${response.status}`);
+				}
+				return response.json();
+			})
+			.then(data => {
+				messageBox.innerText = JSON.stringify(data, null, 2);
+				messageBox.style.color = "black";
+			})
+			.catch(error => {
+				console.error("Caught error in fetch:", error);
+				messageBox.innerText = "Fetch error: " + error.message;
+				messageBox.style.color = "red";
+			});
 		});
 	} else {
-		// Retry after a short delay
 		setTimeout(attachScriptRunnerButtonListener, 200);
 	}
 }
