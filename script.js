@@ -27,7 +27,7 @@ function attachScriptRunnerButtonListener() {
 				return response.json();
 			})
 			.then(data => {
-				messageBox.innerText = JSON.stringify(data, null, 2);
+				messageBox.innerText = issueKey + " " + JSON.stringify(data, null, 2);
 				messageBox.style.color = "black";
 			})
 			.catch(error => {
