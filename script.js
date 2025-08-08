@@ -5,10 +5,10 @@ function attachScriptRunnerButtonListener() {
 	const issueKey = window.AdaptavistBridgeContext?.context?.issueKey;
 	if (issueKey) {
 	  console.log("Issue key is:", issueKey);
-		fetch(`https://your-proxy.example.com/jira/issue-type?issueKey=${issueKey}`)
-		  .then(r => {
-		    if (!r.ok) throw new Error(`HTTP ${r.status}`);
-		    return r.json();
+		fetch(`/rest/api/3/issue/${issueKey}?fields=issuetype`)
+		  .then(response => {
+		    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+		    return response.json();
 		  })
 		  .then(({ issueType }) => {
 		    console.log('Issue type:', issueType);
