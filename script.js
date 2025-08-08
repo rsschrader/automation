@@ -5,7 +5,7 @@ function attachScriptRunnerButtonListener() {
 	const issueKey = window.AdaptavistBridgeContext?.context?.issueKey;
 	if (issueKey) {
 	  console.log("Issue key is:", issueKey);
-		fetch(`/rest/api/3/issue/${issueKey}?fields=issuetype`)
+		fetch(`https://mvwc-jira.atlassian.net/rest/api/3/issue/${issueKey}?fields=issuetype`)
 		  .then(response => {
 		    if (!response.ok) throw new Error(`HTTP ${response.status}`);
 		    return response.json();
