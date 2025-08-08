@@ -1,16 +1,25 @@
 function attachScriptRunnerButtonListener() {
 	const button = document.getElementById("run-custom-script");
 	const messageBox = document.getElementById("script-response-message");
+	
+	const issueKey = window.AdaptavistBridgeContext?.context?.issueKey;
+	if (issueKey) {
+	  console.log("Issue key is:", issueKey);
+		fetch(`https://your-proxy.example.com/jira/issue-type?issueKey=${issueKey}`)
+		  .then(r => {
+		    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+		    return r.json();
+		  })
+		  .then(({ issueType }) => {
+		    console.log('Issue type:', issueType);
+		  })
+		  .catch(err => console.error('Failed to get issue type:', err));
+	} else {
+	  console.error("Issue key not found. Are you inside a ScriptRunner Cloud webPanel?");
+	}
 
 	if (button) {
 		button.addEventListener("click", function() {
-			const issueKey = window.AdaptavistBridgeContext?.context?.issueKey;
-			if (issueKey) {
-			  console.log("Issue key is:", issueKey);
-			} else {
-			  console.error("Issue key not found. Are you inside a ScriptRunner Cloud webPanel?");
-			}
-
 			messageBox.innerText = "Calling API...";
 			messageBox.style.color = "gray";
 
