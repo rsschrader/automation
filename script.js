@@ -1,5 +1,5 @@
 function findElementByTextDebug(tag, text) {
-    const elements = Array.from(document.getElementsByTagName(tag));
+    const elements = Array.from(window.parent.document.getElementsByTagName(tag));
     console.log(`Found ${elements.length} <${tag}> elements`);
 
     elements.forEach((el, index) => {
@@ -16,7 +16,7 @@ function findElementByTextDebug(tag, text) {
 }
 
 // Example usage:
-const el = findElementByTextDebug("span", "Hide Script Fragment");
+const el = findElementByTextDebug("span", "Fragment");
 if (el) el.click();
 
 
