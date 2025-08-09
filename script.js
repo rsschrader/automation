@@ -7,6 +7,7 @@ function attachScriptRunnerButtonListener() {
 		button.addEventListener("click", function() {
 			button2.style.display = "block";
 			button.style.display = "none";
+			messageBox.innerText = "Button 1"; 
 		});
 	} else {
 		// Retry after a short delay
@@ -16,6 +17,7 @@ function attachScriptRunnerButtonListener() {
 		button2.addEventListener("click", function() {
 			button.style.display = "block";
 			button2.style.display = "none";
+			messageBox.innerText = "Button 2" ;
 		});
 	} else {
 		// Retry after a short delay
