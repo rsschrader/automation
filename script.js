@@ -1,3 +1,28 @@
+function findElementByTextDebug(tag, text) {
+    const elements = Array.from(document.getElementsByTagName(tag));
+    console.log(`Found ${elements.length} <${tag}> elements`);
+
+    elements.forEach((el, index) => {
+        console.log(`[#${index}]`, el, "TEXT:", el.textContent.trim());
+    });
+
+	const match = elements.find(el => el.textContent.includes(text));
+    if (match) {
+        console.log("✅ Found match:", match);
+    } else {
+        console.warn(`❌ No element with exact text "${text}" found`);
+    }
+    return match;
+}
+
+// Example usage:
+const el = findElementByTextDebug("span", "Hide Script Fragment");
+if (el) el.click();
+
+
+
+
+
 function attachScriptRunnerButtonListener() {
 	const button = document.getElementById("run-custom-script");
 	const button2 = document.getElementById("run-custom-script2");
