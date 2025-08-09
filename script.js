@@ -1,6 +1,6 @@
 function findElementByTextDebug(tag, text) {
 	const wpar = window.parent;
-	const arr22 = window.parent.getElementsByTagName(tag);
+	const wdoc = window.parent.document;
 	
     const elements = Array.from(window.parent.getElementsByTagName(tag));
     console.log(`Found ${elements.length} <${tag}> elements`);
