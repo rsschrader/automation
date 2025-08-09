@@ -5,8 +5,17 @@ function attachScriptRunnerButtonListener() {
 
 	if (button) {
 		button.addEventListener("click", function() {
-			const issueKey = window.AdaptavistBridgeContext?.context?.issueKey;
 			button2.style.display = "block";
+			button.style.display = "none";
+		});
+	} else {
+		// Retry after a short delay
+		setTimeout(attachScriptRunnerButtonListener, 200);
+	}
+	if (button2) {
+		button2.addEventListener("click", function() {
+			button.style.display = "block";
+			button2.style.display = "none";
 		});
 	} else {
 		// Retry after a short delay
