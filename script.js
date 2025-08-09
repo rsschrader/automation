@@ -15,7 +15,7 @@ function attachScriptRunnerButtonListener() {
 			} else {
 			  console.error("Issue key not found. Are you inside a ScriptRunner Cloud webPanel?");
 			}
-			fetch('https://httpbin.org/get?issueKey=${issueKey}', {
+			fetch('https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/ping', {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json'
