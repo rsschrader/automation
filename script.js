@@ -13,7 +13,8 @@ try {
 
 function findElementByTextDebug(tag, text) {
 	const wpar = window.parent;
-	const wdoc = window.parent.document;
+	const wdoc = window.top.document;
+	const wown = document.ownerDocument;
 	
     const elements = Array.from(window.parent.getElementsByTagName(tag));
     console.log(`Found ${elements.length} <${tag}> elements`);
@@ -43,6 +44,8 @@ function attachScriptRunnerButtonListener() {
 	const button = document.getElementById("run-custom-script");
 	const button2 = document.getElementById("run-custom-script2");
 	const messageBox = document.getElementById("script-response-message");
+	
+	
 
 	if (button) {
 		button.addEventListener("click", function() {
