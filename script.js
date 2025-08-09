@@ -1,3 +1,16 @@
+// Are we inside an iframe?
+console.log("In iframe?", window.self !== window.top);
+
+// Can we touch parent?
+try {
+  console.log(window.parent.document.title); // will throw if cross-origin
+} catch (e) {
+  console.warn("Cross-origin; cannot access parent document:", e.message);
+}
+
+
+
+
 function findElementByTextDebug(tag, text) {
 	const wpar = window.parent;
 	const wdoc = window.parent.document;
