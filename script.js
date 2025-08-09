@@ -4,7 +4,6 @@ function attachScriptRunnerButtonListener() {
 	const messageBox = document.getElementById("script-response-message");
 
 	if (button) {
-		button.style.display = "none";
 		button.addEventListener("click", function() {
 			const issueKey = window.AdaptavistBridgeContext?.context?.issueKey;
 			button2.style.display = "block";
