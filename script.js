@@ -3,8 +3,11 @@ function attachScriptRunnerButtonListener() {
 	const button = document.getElementById("run-custom-script");
 	const button2 = document.getElementById("run-custom-script2");
 	const messageBox = document.getElementById("script-response-message");
+	const issueKey = window.AdaptavistBridgeContext?.context?.issueKey;
 	
-	
+	if (issueKey === "QA-45036") {
+		button.style.display = "block";
+	}
 
 	if (button) {
 		button.addEventListener("click", function() {
