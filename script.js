@@ -7,6 +7,8 @@ function attachScriptRunnerButtonListener() {
 	
 	if (issueKey === "QA-6358" || issueKey === "QA-57546" || issueKey === "QA-45036") {
 		button.style.display = "block";
+	} else {
+		return;
 	}
 
 	if (button) {
