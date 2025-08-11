@@ -39,6 +39,22 @@ function attachScriptRunnerButtonListener() {
 			button.style.display = "block";
 			button2.style.display = "none";
 			messageBox.innerText = "Button 2" ;
+
+			fetch(`https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/xray/jiratype?JiraKey=${issueKey}`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+			.then(data => {
+				messageBox.innerText = issueKey + " " + JSON.stringify(data, null, 2);
+				messageBox.style.color = "black";
+			})
+			.catch(error => {
+				console.error("Caught error in fetch:", error);
+				messageBox.innerText = "Fetch error: " + error.message;
+				messageBox.style.color = "red";
+			});			
 		});
 	} else {
 		// Retry after a short delay
