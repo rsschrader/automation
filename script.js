@@ -53,8 +53,8 @@ function attachScriptRunnerButtonListener() {
 			    return response.json(); // parse JSON body
 			  })
 			.then(data => {
-				messageBox.innerText = data.fields.issuetype.name.replace(/ /g, "");
-				//messageBox.innerText = issueKey + " " + JSON.stringify(data, null, 2);
+				const strIssueType = data.fields.issuetype.name.replace(/ /g, "");
+				messageBox.innerText = strIssueType + "\n\n" + "issueKey" + " " + JSON.stringify(data, null, 2);
 				messageBox.style.color = "black";
 			})
 			.catch(error => {
