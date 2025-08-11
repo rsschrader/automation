@@ -5,7 +5,7 @@ function attachScriptRunnerButtonListener() {
 	const messageBox = document.getElementById("script-response-message");
 	const issueKey = window.AdaptavistBridgeContext?.context?.issueKey;
 	
-	if (issueKey === "QA-45036") {
+	if (issueKey === "QA-6358" || issueKey === "QA-57546" || issueKey === "QA-45036") {
 		button.style.display = "block";
 	}
 
@@ -46,8 +46,15 @@ function attachScriptRunnerButtonListener() {
 					'Content-Type': 'application/json'
 				}
 			})
+			.then(response => {
+			    if (!response.ok) {
+			      throw new Error(`HTTP error! Status: ${response.status}`);
+			    }
+			    return response.json(); // parse JSON body
+			  })
 			.then(data => {
-				messageBox.innerText = issueKey + " " + JSON.stringify(data, null, 2);
+				messageBox.innerText = data.fields.issuetype.name.replace(/ /g, "");
+				//messageBox.innerText = issueKey + " " + JSON.stringify(data, null, 2);
 				messageBox.style.color = "black";
 			})
 			.catch(error => {
