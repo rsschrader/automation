@@ -27,7 +27,7 @@ function attachScriptRunnerButtonListener() {
 				  	clearInterval(intervalId);
 					messageBox.innerText = "Loop finished";
 				}
-			}, 1000); // 1-second delay between iterations
+			}, 250); // 1-second delay between iterations
 
 		});
 	} else {
