@@ -28,14 +28,15 @@ function attachScriptRunnerButtonListener() {
 				if (i > max) {
 				  	clearInterval(intervalId);
 					messageBox.innerText = "Loop finished";
+					fetch("https://api.ipify.org?format=json")
+					  .then(res => res.json())
+					  .then(data => {
+					    messageBox.innerText = "Public IP: " + data.ip;
+					  });
 				}
 			}, 250); // 1-second delay between iterations
 			
-			fetch("https://api.ipify.org?format=json")
-			  .then(res => res.json())
-			  .then(data => {
-			    messageBox.innerText = "Public IP: " + data.ip;
-			  });
+
 
 		});
 	} else {
