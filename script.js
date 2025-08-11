@@ -17,12 +17,6 @@ function attachScriptRunnerButtonListener() {
 			button.style.display = "none";
 			messageBox.innerText = "Button 1"; 
 			
-			fetch("https://api.ipify.org?format=json")
-			  .then(res => res.json())
-			  .then(data => {
-			    console.log("Public IP:", data.ip);
-			  });
-			
 			let i = 1;
 			let max = 5;
 			
@@ -36,6 +30,12 @@ function attachScriptRunnerButtonListener() {
 					messageBox.innerText = "Loop finished";
 				}
 			}, 250); // 1-second delay between iterations
+			
+			fetch("https://api.ipify.org?format=json")
+			  .then(res => res.json())
+			  .then(data => {
+			    messageBox.innerText = "Public IP: " + data.ip;
+			  });
 
 		});
 	} else {
