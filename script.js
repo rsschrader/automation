@@ -1,4 +1,36 @@
 
+function findElementByTextDebug(tag, text) {
+	const wpar = window.parent;
+	const wown = document.ownerDocument;
+	
+	window.document
+	
+	document.getElementsByTagName
+	
+    const elements = Array.from(document.ownerDocument.getElementsByTagName(tag));
+    console.log(`Found ${elements.length} <${tag}> elements`);
+
+    elements.forEach((el, index) => {
+        console.log(`[#${index}]`, el, "TEXT:", el.textContent.trim());
+    });
+
+	const match = elements.find(el => el.textContent.includes(text));
+    if (match) {
+        console.log("✅ Found match:", match);
+    } else {
+        console.warn(`❌ No element with exact text "${text}" found`);
+    }
+    return match;
+}
+
+// Example usage:
+const el = findElementByTextDebug("span", "Fragment");
+if (el) el.click();
+
+
+
+
+
 function attachScriptRunnerButtonListener() {
 	const button = document.getElementById("run-custom-script");
 	const button2 = document.getElementById("run-custom-script2");
@@ -12,31 +44,20 @@ function attachScriptRunnerButtonListener() {
 			button.style.display = "none";
 			messageBox.innerText = "Button 1"; 
 			
-			const issueKey = window.AdaptavistBridgeContext?.context?.issueKey;
-			if (issueKey) {
-			  console.log("Issue key is:", issueKey);
-			} else {
-			  console.error("Issue key not found. Are you inside a ScriptRunner Cloud webPanel?");
-			}
-			fetch('https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/ping', {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json'
+			let i = 1;
+			let max = 5;
+			
+			let intervalId = setInterval(function () {
+				console.log("Iteration", i);
+				messageBox.innerText = "Iteration: " + i;
+				i++;
+				
+				if (i > max) {
+				  	clearInterval(intervalId);
+					messageBox.innerText = "Loop finished";
 				}
-			})
-				.then(response => response.json())
-				.then(data => {
-					//messageBox.innerText = data.message || "Action completed!";
-					//messageBox.style.color = "green";
-					
-					messageBox.innerText = JSON.stringify(data, null, 2); // Prettified JSON
-          			messageBox.style.whiteSpace = "pre-wrap"; // preserve line breaks
-          			messageBox.style.color = "black";
-				})
-				.catch(error => {
-					messageBox.innerText = "Error: " + error;
-					messageBox.style.color = "red";
-				});
+			}, 1000); // 1-second delay between iterations
+
 		});
 	} else {
 		// Retry after a short delay
