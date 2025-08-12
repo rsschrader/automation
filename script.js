@@ -7,7 +7,7 @@ function attachScriptRunnerButtonListener() {
 	const issueKey = window.AdaptavistBridgeContext?.context?.issueKey;
 	
 	if (issueKey === "QA-6358" || issueKey === "QA-57546" || issueKey === "QA-45036") {
-		button.style.display = "block";
+		button1.style.display = "block";
 	} else {
 		return;
 	}
