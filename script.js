@@ -1,6 +1,7 @@
 
 function attachScriptRunnerButtonListener() {
-	const button = document.getElementById("run-custom-script");
+	const buttonIp = document.getElementById("run-ip-script1");
+	const button1 = document.getElementById("run-custom-script1");
 	const button2 = document.getElementById("run-custom-script2");
 	const messageBox = document.getElementById("script-response-message");
 	const issueKey = window.AdaptavistBridgeContext?.context?.issueKey;
@@ -10,8 +11,27 @@ function attachScriptRunnerButtonListener() {
 	} else {
 		return;
 	}
+	
+	if (buttonIp) {
+		button.addEventListener("click", function() {
+			messageBox.innerText = "Button Ip"; 
+			
+			fetch("https://api.ipify.org")
+			  .then(res => res.text())
+			  .then(ip => {
+				  fetch(`https://ipinfo.io/${ip}/org`)
+				  .then(res => res.text())
+				  .then(data => {
+					messageBox.innerText = "IP: " + ip + " - Info: " + data;
+				  });
+			  });
+		});
+	} else {
+		// Retry after a short delay
+		setTimeout(attachScriptRunnerButtonListener, 200);
+	}
 
-	if (button) {
+	if (button1) {
 		button.addEventListener("click", function() {
 			button2.style.display = "block";
 			button.style.display = "none";
@@ -28,20 +48,8 @@ function attachScriptRunnerButtonListener() {
 				if (i > max) {
 				  	clearInterval(intervalId);
 					messageBox.innerText = "Loop finished";
-					
-					const ip = "0.0.0.0"
-					fetch("https://api.ipify.org?format=json")
-					  .then(res => res.json())
-					  .then(data => {
-						ip = data.ip;
-					  });
-					fetch(`https://ipinfo.io/${ip}/org`)
-					  .then(res => res.json())
-					  .then(data => {
-						messageBox.innerText = "IP: " + ip + "Info: " + data;
-					  });
 				}
-			}, 250); // 1-second delay between iterations
+			}, 150); // 1-second delay between iterations
 		});
 	} else {
 		// Retry after a short delay
