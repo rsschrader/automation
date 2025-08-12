@@ -102,7 +102,7 @@ function attachScriptRunnerButtonListener() {
 			  })
 			.then(data => {
 				const strIssueType = data.fields.issuetype.name.replace(/ /g, "");
-				messageBox.innerText = strIssueType + "\n\n" + "issueKey" + " " + JSON.stringify(data, null, 2);
+				messageBox.innerText = strIssueType + "\n\n" + issueKey + " " + JSON.stringify(data, null, 2);
 				messageBox.style.color = "black";
 			})
 			.catch(error => {
