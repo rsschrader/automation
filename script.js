@@ -58,62 +58,97 @@ function attachScriptRunnerButtonListener() {
 	  });
 	}
 	if (button1) {
-		button1.addEventListener("click", function() {
-			button2.style.display = "block";
-			button1.style.display = "none";
-			messageBox.innerText = "Button 1"; 
-			
-			let i = 1;
-			let max = 5;
-			
-			let intervalId = setInterval(function () {
-				console.log("Iteration", i);
-				messageBox.innerText = "Iteration: " + i;
-				i++;
-				
-				if (i > max) {
-				  	clearInterval(intervalId);
-					messageBox.innerText = "Loop finished";
-				}
-			}, 250); // 1-second delay between iterations
-
-		});
+	  // simple sleep helper
+	  const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+	
+	  // prevent multiple concurrent loops
+	  let isLoopRunning = false;
+	
+	  button1.addEventListener("click", async function () {
+	    if (isLoopRunning) return;      // ignore extra clicks while running
+	    isLoopRunning = true;
+	
+	    button2.style.display = "block";
+	    button1.style.display = "none";
+	    messageBox.innerText = "Button 1";
+	    messageBox.style.color = "black";
+	
+	    try {
+	      let i = 1;
+	      const max = 5;
+	      const delay = 250; // 250ms between iterations (your comment said 1s, but this is 250ms)
+	
+	      while (i <= max) {
+	        console.log("Iteration", i);
+	        messageBox.innerText = "Iteration: " + i;
+	        i++;
+	        await sleep(delay);
+	      }
+	
+	      messageBox.innerText = "Loop finished";
+	    } catch (err) {
+	      console.error("Loop error:", err);
+	      messageBox.innerText = "Loop error: " + err.message;
+	      messageBox.style.color = "red";
+	    } finally {
+	      isLoopRunning = false;
+	    }
+	  });
 	} else {
-		// Retry after a short delay
-		setTimeout(attachScriptRunnerButtonListener, 200);
+	  // Retry after a short delay
+	  setTimeout(attachScriptRunnerButtonListener, 200);
 	}
 	if (button2) {
-		button2.addEventListener("click", function() {
-			button1.style.display = "block";
-			button2.style.display = "none";
-			messageBox.innerText = "Button 2" ;
-
-			fetch(`https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/xray/jiratype?JiraKey=${issueKey}`, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			})
-			.then(response => {
-			    if (!response.ok) {
-			      throw new Error(`HTTP error! Status: ${response.status}`);
-			    }
-			    return response.json(); // parse JSON body
-			  })
-			.then(data => {
-				const strIssueType = data.fields.issuetype.name.replace(/ /g, "");
-				messageBox.innerText = strIssueType + "\n\n" + issueKey + " " + JSON.stringify(data, null, 2);
-				messageBox.style.color = "black";
-			})
-			.catch(error => {
-				console.error("Caught error in fetch:", error);
-				messageBox.innerText = "Fetch error: " + error.message;
-				messageBox.style.color = "red";
-			});			
-		});
+	  button2.addEventListener("click", async function () {
+	    // Toggle button visibility
+	    button1.style.display = "block";
+	    button2.style.display = "none";
+	    messageBox.innerText = "Fetching Jira type info...";
+	    messageBox.style.color = "black";
+	
+	    try {
+	      // Helper: fetch with timeout
+	      const fetchWithTimeout = (url, options = {}, timeout = 5000) => {
+	        return Promise.race([
+	          fetch(url, options),
+	          new Promise((_, reject) =>
+	            setTimeout(() => reject(new Error("Request timed out")), timeout)
+	          )
+	        ]);
+	      };
+	
+	      // Make the request
+	      const response = await fetchWithTimeout(
+	        `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/xray/jiratype?JiraKey=${issueKey}`,
+	        {
+	          method: 'GET',
+	          headers: {
+	            'Content-Type': 'application/json'
+	          }
+	        }
+	      );
+	
+	      if (!response.ok) {
+	        throw new Error(`HTTP error! Status: ${response.status}`);
+	      }
+	
+	      const data = await response.json();
+	
+	      // Extract and format the issue type
+	      const strIssueType = data.fields.issuetype.name.replace(/ /g, "");
+	      messageBox.innerText =
+	        `${strIssueType}\n\n${issueKey} ${JSON.stringify(data, null, 2)}`;
+	      messageBox.style.color = "black";
+	
+	    } catch (error) {
+	      console.error("Caught error in fetch:", error);
+	      messageBox.innerText = "Fetch error: " + error.message;
+	      messageBox.style.color = "red";
+	    }
+	  });
 	} else {
-		// Retry after a short delay
-		setTimeout(attachScriptRunnerButtonListener, 200);
+	  // Retry after a short delay
+	  setTimeout(attachScriptRunnerButtonListener, 200);
 	}
 }
 
