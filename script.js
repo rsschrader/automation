@@ -16,28 +16,17 @@ function attachScriptRunnerButtonListener() {
 		buttonIp.addEventListener("click", function() {
 			messageBox.innerText = "button Ip" ;
 
-			fetch(`https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/xray/jiratype?JiraKey=${issueKey}`, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			})
-			.then(response => {
-			    if (!response.ok) {
-			      throw new Error(`HTTP error! Status: ${response.status}`);
-			    }
-			    return response.json(); // parse JSON body
+			fetch("https://api.ipify.org")
+			  .then(res => res.text()) 
+			  .then(ip => {
+			    messageBox.innerText = ip;
+			    messageBox.style.color = "black";
 			  })
-			.then(data => {
-				const strIssueType = data.fields.issuetype.name.replace(/ /g, "");
-				messageBox.innerText = strIssueType + "\n\n" + "issueKey" + " " + JSON.stringify(data, null, 2);
-				messageBox.style.color = "black";
-			})
-			.catch(error => {
-				console.error("Caught error in fetch:", error);
-				messageBox.innerText = "Fetch error: " + error.message;
-				messageBox.style.color = "red";
-			});			
+			  .catch(err => {
+			    console.error("Caught error in fetch:", err);
+			    messageBox.innerText = "Fetch error: " + err.message;
+			    messageBox.style.color = "red";
+			  });		
 		});
 	} else {
 		// Retry after a short delay
