@@ -41,7 +41,7 @@ function attachScriptRunnerButtonListener() {
 	
 	      // 2. Get organization info for that IP
 	      const orgRes = await fetchWithTimeout(
-	        `https://ipinfo.io/${ip}/org?token=YOUR_TOKEN`
+	        `https://ipinfo.io/${ip}/org`
 	      );
 	      if (!orgRes.ok) throw new Error(`Org API failed: ${orgRes.status}`);
 	
