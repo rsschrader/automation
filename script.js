@@ -13,7 +13,7 @@ function attachScriptRunnerButtonListener() {
 	}
 	
 	if (buttonIp) {
-		button.addEventListener("click", function() {
+		buttonIp.addEventListener("click", function() {
 			messageBox.innerText = "Button Ip"; 
 			
 			fetch("https://api.ipify.org")
@@ -32,9 +32,9 @@ function attachScriptRunnerButtonListener() {
 	}
 
 	if (button1) {
-		button.addEventListener("click", function() {
+		button1.addEventListener("click", function() {
 			button2.style.display = "block";
-			button.style.display = "none";
+			button1.style.display = "none";
 			messageBox.innerText = "Button 1"; 
 			
 			let i = 1;
@@ -57,7 +57,7 @@ function attachScriptRunnerButtonListener() {
 	}
 	if (button2) {
 		button2.addEventListener("click", function() {
-			button.style.display = "block";
+			button1.style.display = "block";
 			button2.style.display = "none";
 			messageBox.innerText = "Button 2" ;
 
