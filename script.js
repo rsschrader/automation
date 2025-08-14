@@ -119,7 +119,7 @@ function attachScriptRunnerButtonListener() {
 	
 	      // Make the request
 	      const response = await fetchWithTimeout(
-	        `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/xray/jiratype?JiraKey=${issueKey}`,
+	        `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/type?JiraIssueKey=${issueKey}`,
 	        {
 	          method: 'GET',
 	          headers: {
