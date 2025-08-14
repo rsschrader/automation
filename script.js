@@ -76,7 +76,7 @@ function attachScriptRunnerButtonListener() {
 	    try {
 	      let i = 1;
 	      const max = 5;
-	      const delay = 250; // 250ms between iterations (your comment said 1s, but this is 250ms)
+	      const delay = 150; // 250ms between iterations (your comment said 1s, but this is 250ms)
 	
 	      while (i <= max) {
 	        console.log("Iteration", i);
