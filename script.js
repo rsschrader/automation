@@ -50,7 +50,7 @@ function attachScriptRunnerButtonListener() {
 	
 	      // 3. Display final result
 		  const currentUrl = window.location.href;
-		  messageBox.innerText = `IP: ${ip} - Org: ${org}\nURL: ${currentUrl}`;
+		  messageBox.innerText = `IP: ${ip} - Org: ${org}`;
 	    } catch (err) {
 	      console.error("Error fetching IP or Org:", err);
 	      messageBox.innerText = `Fetch error: ${err.message}`;
