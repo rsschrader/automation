@@ -13,6 +13,11 @@ function attachScriptRunnerButtonListener() {
     };
 
     const buttonMain = document.getElementById("run-test-main-script");
+    if (issueKey === "QA-6358" || issueKey === "QA-57546" || issueKey === "QA-45036") {
+		buttonMain.style.display = "block";
+	} else {
+		return;
+	}
     if (buttonMain) {
         buttonMain.addEventListener("click", async function () {
             try {
