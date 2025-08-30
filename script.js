@@ -19,8 +19,7 @@ function attachScriptRunnerButtonListener() {
     };
 
     const runAutomation = () => {
-        //const runUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/run?JiraIssueType=${issueType}&JiraIssueKey=${issueKey}`;
-        const runUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/type?JiraIssueKey=${issueKey}`;
+        const runUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/run?JiraIssueType=${issueType}&JiraIssueKey=${issueKey}`;
         return fetchWithTimeout(runUrl, { method: "GET" })
         .then((response) => {
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
