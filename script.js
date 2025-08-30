@@ -24,19 +24,12 @@ function attachScriptRunnerButtonListener() {
         .then(async (response) => {
 			const bodyText = await response.text(); let bodyJson = null;
       		try { bodyJson = bodyText ? JSON.parse(bodyText) : null; } catch {}
-
 			if (!response.ok) {
 				const error = new Error(`HTTP ${response.status} ${response.statusText || ""}`.trim());
-				error.status = response.status; 
-				error.statusText = response.statusText;
-				error.body = bodyJson ?? bodyText; // <-- error payload captured here
-				throw error;
+				error.status = response.status; error.statusText = response.statusText;
+				error.body = bodyJson ?? bodyText; throw error;
 			}
 			return bodyJson ?? bodyText;
-
-            //if (!response.ok) throw new Error(`HTTP ${response.status}`);
-			//messageBox.innerText = response.text();
-            //return response.json();
         })
         .then((data) => {
             messageBox.innerText = `${JSON.stringify(data, null, 2)}`;
@@ -70,7 +63,7 @@ function attachScriptRunnerButtonListener() {
                     console.error("Caught error in runAutomation:", error);
 					const details = typeof error.body === "string" ? error.body 
 										: (error.body ? JSON.stringify(error.body, null, 2) : error.message);
-					messageBox.innerText = `❌ ${error.status || ""} ${error.statusText || ""}\n${details}`;
+					messageBox.innerText = `Error ${error.status || ""} ${error.statusText || ""}\n${details}`;
                 });
             });
         }
