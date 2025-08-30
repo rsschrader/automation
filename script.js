@@ -48,7 +48,7 @@ function attachScriptRunnerButtonListener() {
                 buttonExecution.style.display = "block";
                 activeButton = buttonExecution; break;
             default:
-                throw new Error(`JIRA Type error! Status: ${response.status}`);
+                messageBox.innerText = "Test Automation is accessible only from TestPlans or TestExecutions";
         }
         if (activeButton && !activeButton.dataset.bound) {
             activeButton.dataset.bound = "1";
