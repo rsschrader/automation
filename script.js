@@ -15,6 +15,9 @@ function attachScriptRunnerButtonListener() {
 	} else {
 		return;
 	}
+
+    const strIssueType = "";
+
     if (buttonMain) {
         buttonMain.addEventListener("click", async function () {
             try {
@@ -25,12 +28,12 @@ function attachScriptRunnerButtonListener() {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 const data = await response.json();
-                const strIssueType = data.fields.issuetype.name.replace(/ /g, "");
+                strIssueType = data.fields.issuetype.name.replace(/ /g, "");
                 messageBox.innerText = `${strIssueType}\n\n${issueKey} ${JSON.stringify(data, null, 2)}`;
 
             } catch (error) {
                 console.error("Caught error in fetch:", error);
-                messageBox.innerText = "Fetch error: " + error.message;
+                messageBox.innerText = "Test Automation is accessible only from the corporate network. (on-site or via VPN)";
             }
         });
     }
