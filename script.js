@@ -58,7 +58,7 @@ function attachScriptRunnerButtonListener() {
 				})
 				.then((data) => {
 					messageBox.innerText = `${JSON.stringify(data, null, 2)}`;
-				});
+				})
 				.catch((error) => {
                     console.error("Caught error in runAutomation:", error);
                 });
