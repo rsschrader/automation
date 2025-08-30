@@ -21,13 +21,26 @@ function attachScriptRunnerButtonListener() {
     const runAutomation = () => {
         const runUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/run?JiraIssueType=${issueType}&JiraIssueKey=${issueKey}`;
         return fetchWithTimeout(runUrl, { method: "GET" })
-        .then((response) => {
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-			messageBox.innerText = response.text();
-            return response.json();
+        .then(async (response) => {
+			const bodyText = await response.text(); let bodyJson = null;
+      		try { bodyJson = bodyText ? JSON.parse(bodyText) : null; } catch {}
+
+			if (!response.ok) {
+				const error = new Error(`HTTP ${response.status} ${response.statusText || ""}`.trim());
+				error.status = response.status; 
+				error.statusText = response.statusText;
+				error.body = bodyJson ?? bodyText; // <-- error payload captured here
+				throw error;
+			}
+			return bodyJson ?? bodyText;
+
+            //if (!response.ok) throw new Error(`HTTP ${response.status}`);
+			//messageBox.innerText = response.text();
+            //return response.json();
         })
         .then((data) => {
             messageBox.innerText = `${JSON.stringify(data, null, 2)}`;
+			return data;
         });
     };
 
