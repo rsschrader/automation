@@ -5,10 +5,7 @@ function attachScriptRunnerButtonListener() {
 
     const fetchWithTimeout = (url, options = {}, timeout = 300000) => {
         return Promise.race([
-            fetch(url, options),
-            new Promise((_, reject) =>
-                setTimeout(() => reject(new Error("Request timed out")), timeout)
-            )
+            fetch(url, options), new Promise((_, reject) => setTimeout(() => reject(new Error("Request timed out")), timeout))
         ]);
     };
 
