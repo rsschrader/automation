@@ -14,8 +14,8 @@ function attachScriptRunnerButtonListener() {
 	}
 
 	if (buttonIp) {
-		buttonIp.addEventListener("click", async function () {
-	    messageBox.innerText = "Fetching public IP...";
+	  	buttonIp.addEventListener("click", async function () {
+	    messageBox.innerText = ">> Fetching public IP...";
 	    messageBox.style.color = "black";
 	
 	    try {
@@ -49,8 +49,7 @@ function attachScriptRunnerButtonListener() {
 	      const org = await orgRes.text();
 	
 	      // 3. Display final result
-		  const currentUrl = window.location.href;
-		  messageBox.innerText = `IP: ${ip} - Org: ${org}`;
+	      messageBox.innerText = `IP: ${ip} - Org: ${org}`;
 	    } catch (err) {
 	      console.error("Error fetching IP or Org:", err);
 	      messageBox.innerText = `Fetch error: ${err.message}`;
