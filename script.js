@@ -1,5 +1,8 @@
 
 function attachScriptRunnerButtonListener() {
+	const messageBox = document.getElementById("script-response-message");
+	const issueKey = window.AdaptavistBridgeContext?.context?.issueKey;
+
 	const fetchWithTimeout = (url, options = {}, timeout = 300000) => {
 		return Promise.race([
 			fetch(url, options),
@@ -22,7 +25,7 @@ function attachScriptRunnerButtonListener() {
 		if (!response.ok) {
 	        throw new Error(`HTTP error! Status: ${response.status}`);
 	    }
-		
+
 	} catch (error) {
 	    console.error("Caught error in fetch:", error);
 	    messageBox.innerText = "Fetch error: " + error.message;
