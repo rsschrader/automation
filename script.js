@@ -51,10 +51,16 @@ function attachScriptRunnerButtonListener() {
         }
         if (activeButton && !activeButton.dataset.bound) {
             activeButton.dataset.bound = "1";
-            activeButton.addEventListener("click", () => {
-                runAutomation().catch((error) => {
+            activeButton.addEventListener("click", () => {runAutomation()
+				.then((response) => {
+					if (!response.ok) throw new Error(`HTTP ${response.status}`);
+					return response.json();
+				})
+				.then((data) => {
+					messageBox.innerText = `${JSON.stringify(data, null, 2)}`;
+				});
+				.catch((error) => {
                     console.error("Caught error in runAutomation:", error);
-                    messageBox.innerText = `${JSON.stringify(error, null, 2)}`;
                 });
             });
         }
