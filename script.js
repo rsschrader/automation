@@ -23,6 +23,7 @@ function attachScriptRunnerButtonListener() {
         return fetchWithTimeout(runUrl, { method: "GET" })
         .then((response) => {
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
+			messageBox.innerText = response.text();
             return response.json();
         })
         .then((data) => {
