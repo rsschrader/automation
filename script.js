@@ -26,7 +26,7 @@ function attachScriptRunnerButtonListener() {
             return response.json();
         })
         .then((data) => {
-            messageBox.innerText = `${issueType}\n\n${issueKey} ${JSON.stringify(data, null, 2)}`;
+            messageBox.innerText = `${JSON.stringify(data, null, 2)}`;
         });
     };
 
@@ -54,7 +54,7 @@ function attachScriptRunnerButtonListener() {
             activeButton.addEventListener("click", () => {
                 runAutomation().catch((error) => {
                     console.error("Caught error in runAutomation:", error);
-                    messageBox.innerText = "Test Automation is ERROR" + error.message;
+                    messageBox.innerText = `${JSON.stringify(error, null, 2)}`;
                 });
             });
         }
