@@ -10,7 +10,7 @@ function attachScriptRunnerButtonListener() {
     }
     buttonPlan.style.display = "none"; buttonExecution.style.display = "none";
 
-    if (!["QA-6358", "QA-57546", "QA-45036"].includes(issueKey)) { return; }
+    if (!["QA-62750", "QA-62632", "QA-45036"].includes(issueKey)) { return; }
 
     const fetchWithTimeout = (url, options = {}, timeout = 300000) => {
         const controller = new AbortController();
