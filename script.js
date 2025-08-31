@@ -28,7 +28,7 @@ async function attachScriptRunnerButtonListener() {
 		messageBox.innerText =
 		error.message === "Failed to fetch"
 			? "Test Automation is accessible only from the corporate network. (on-site or via VPN)"
-			: "Service is Offline: " + error.message;
+			: "Service is Offline: Please contact SVT admin group";
 		return; 
 	}
 
@@ -84,7 +84,7 @@ async function attachScriptRunnerButtonListener() {
     })
     .catch((error) => {
         console.error("Caught error in /type fetch:", error);
-        messageBox.innerText = "Test Automation is accessible only from the corporate network. (on-site or via VPN) >> " + error.message;
+        messageBox.innerText = "Process Error (" + error.message + ") Please contact SVT admin group";
     });
 }
 document.addEventListener("DOMContentLoaded", attachScriptRunnerButtonListener);
