@@ -58,7 +58,7 @@ function attachScriptRunnerButtonListener() {
     };
 
     const typeUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/type?JiraIssueKey=${issueKey}&FullError=false`;
-    fetchWithTimeout(typeUrl, 15000)
+    fetchWithTimeout(typeUrl, 300000)
     .then((response) => {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         return response.json();
