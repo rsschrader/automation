@@ -13,12 +13,12 @@ async function attachScriptRunnerButtonListener() {
     if (!panelPlan || !statusPlan || !buttonPlan || !panelExecution || !statusExecution || !buttonExecution || !messageBox || !issueKey) {
         setTimeout(attachScriptRunnerButtonListener, 200); return;
     }
+    messageBox.innerText = "Test Automation Service Connecting ..."; 
     hideRow(panelPlan, [statusPlan, buttonPlan]);
     hideRow(panelExecution, [statusExecution, buttonExecution]);
 
 	/*TO DELETE*/if (!["QA-62750", "QA-62632", "QA-45036"].includes(issueKey)) { return; }
 	
-    messageBox.innerText = "Test Automation Service Connecting ..."; 
 	function fetchWithTimeout(url, timeout) {
 		const controller = new AbortController();
 		const tid = setTimeout(() => controller.abort(), timeout);
