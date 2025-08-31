@@ -1,6 +1,6 @@
 async function attachScriptRunnerButtonListener() {
-    const buttonPlan = document.getElementById("run-test-plan-script");
-    const buttonExecution = document.getElementById("run-test-execution-script");
+    const buttonPlan = document.getElementById("run-test-plan-button");
+    const buttonExecution = document.getElementById("run-test-execution-button");
     const messageBox = document.getElementById("script-response-message");
     const issueKey = window.AdaptavistBridgeContext?.context?.issueKey;
     let issueType = ""; let sourceInfo = "";
