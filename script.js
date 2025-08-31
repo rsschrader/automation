@@ -10,6 +10,17 @@ async function attachScriptRunnerButtonListener() {
     if (!buttonPlan || !buttonExecution || !messageBox) {
         setTimeout(attachScriptRunnerButtonListener, 200); return;
     }
+    buttonPlan.style.display = "none"; buttonExecution.style.display = "none";
+	messageBox.innerText = "Test Automation Service Connecting ..."; 
+
+	const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+	function fetchWithTimeout(url, timeout) {
+		const controller = new AbortController();
+		const tid = setTimeout(() => controller.abort(), timeout);
+		return fetch(url, { method: "GET", signal: controller.signal }).finally(() => clearTimeout(tid));
+	}
+
+
 
 
 	if (buttonPlan) {
@@ -19,18 +30,10 @@ async function attachScriptRunnerButtonListener() {
 	    messageBox.style.color = "black";
 	
 	    try {
-	      // Helper to add timeout to fetch
-	      const fetchWithTimeout = (url, options = {}, timeout = 5000) => {
-	        return Promise.race([
-	          fetch(url, options),
-	          new Promise((_, reject) =>
-	            setTimeout(() => reject(new Error("Request timed out")), timeout)
-	          )
-	        ]);
-	      };
+
 	
 	      // 1. Get the public IP
-	      const ipRes = await fetchWithTimeout("https://api.ipify.org?format=json");
+	      const ipRes = await fetchWithTimeout("https://api.ipify.org?format=json", 5000);
 	      if (!ipRes.ok) throw new Error(`IP API failed: ${ipRes.status}`);
 	
 	      const ipData = await ipRes.json();
@@ -41,9 +44,7 @@ async function attachScriptRunnerButtonListener() {
 	      messageBox.innerText = `IP: ${ip} - Fetching organization info...`;
 	
 	      // 2. Get organization info for that IP
-	      const orgRes = await fetchWithTimeout(
-	        `https://ipinfo.io/${ip}/org`
-	      );
+	      const orgRes = await fetchWithTimeout(`https://ipinfo.io/${ip}/org`, 5000);
 	      if (!orgRes.ok) throw new Error(`Org API failed: ${orgRes.status}`);
 	
 	      const org = await orgRes.text();
@@ -61,15 +62,8 @@ async function attachScriptRunnerButtonListener() {
 	return;
 
 
-    buttonPlan.style.display = "none"; buttonExecution.style.display = "none";
-	messageBox.innerText = "Test Automation Service Connecting ..."; 
 
-	const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-	function fetchWithTimeout(url, timeout) {
-		const controller = new AbortController();
-		const tid = setTimeout(() => controller.abort(), timeout);
-		return fetch(url, { method: "GET", signal: controller.signal }).finally(() => clearTimeout(tid));
-	}
+
 	try {
 		const pingResp = await fetchWithTimeout(`https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/ping`, 5000);
 		if (!pingResp.ok) throw new Error(`HTTP ${pingResp.status}`);
