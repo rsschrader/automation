@@ -105,11 +105,11 @@ async function attachScriptRunnerButtonListener() {
             case "TestPlan":
                 showPanel(panelPlan); 
                 statusButton = statusPlan; activeButton = buttonPlan; 
-                messageBox.innerText = "Test Automation Service is Online"; break;   
+                messageBox.innerText = "Test Automation Service is Online. Plan"; break;   
             case "TestExecution":
                 showPanel(panelExecution); 
                 statusButton = statusExecution; activeButton = buttonExecution; 
-                messageBox.innerText = "Test Automation Service is Online"; break;
+                messageBox.innerText = "Test Automation Service is Online. Executions"; break;
             default:
                 messageBox.innerText = "Test Automation is accessible only from TestPlans or TestExecutions";
         }
