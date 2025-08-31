@@ -3,7 +3,7 @@ async function attachScriptRunnerButtonListener() {
     const buttonExecution = document.getElementById("run-test-execution-script");
     const messageBox = document.getElementById("script-response-message");
     const issueKey = window.AdaptavistBridgeContext?.context?.issueKey;
-    let issueType = "";
+    let issueType = ""; let sourceInfo = "";
 
 	/*TO DELETE*/if (!["QA-62750", "QA-62632", "QA-45036"].includes(issueKey)) { return; }
 
@@ -20,49 +20,20 @@ async function attachScriptRunnerButtonListener() {
 		return fetch(url, { method: "GET", signal: controller.signal }).finally(() => clearTimeout(tid));
 	}
 
-
-
-
-	if (buttonPlan) {
-		buttonPlan.style.display = "block"; 
-	  	buttonPlan.addEventListener("click", async function () {
-	    messageBox.innerText = ">> Fetching public IP...";
-	    messageBox.style.color = "black";
-	
-	    try {
-
-	
-	      // 1. Get the public IP
-	      const ipRes = await fetchWithTimeout("https://api.ipify.org?format=json", 5000);
-	      if (!ipRes.ok) throw new Error(`IP API failed: ${ipRes.status}`);
-	
-	      const ipData = await ipRes.json();
-	      const ip = ipData?.ip;
-	      if (!ip) throw new Error("No IP address returned");
-	
-	      // Show IP while fetching org info
-	      messageBox.innerText = `IP: ${ip} - Fetching organization info...`;
-	
-	      // 2. Get organization info for that IP
-	      const orgRes = await fetchWithTimeout(`https://ipinfo.io/${ip}/org`, 5000);
-	      if (!orgRes.ok) throw new Error(`Org API failed: ${orgRes.status}`);
-	
-	      const org = await orgRes.text();
-	
-	      // 3. Display final result
-	      messageBox.innerText = `IP: ${ip} - Org: ${org}`;
-	    } catch (err) {
-	      console.error("Error fetching IP or Org:", err);
-	      messageBox.innerText = `Fetch error: ${err.message}`;
-	      messageBox.style.color = "red";
-	    }
-	  });
+	try {
+		const ipResponce = await fetchWithTimeout("https://api.ipify.org?format=json", 5000);
+		if (!ipResponce.ok) throw new Error(`IP API failed: ${ipResponce.status}`);
+		const ipData = await ipResponce.json();
+		const sourceIp = ipData?.ip;
+		if (!sourceIp) throw new Error("No IP address returned");
+		const orgResponce = await fetchWithTimeout(`https://ipinfo.io/${sourceIp}/org`, 5000);
+		if (!orgResponce.ok) throw new Error(`Org API failed: ${orgResponce.status}`);
+		const sourceOrg = await orgResponce.text();
+		sourceInfo = `IP: ${sourceIp} - Org: ${sourceOrg}`;
+	} catch (error) {
+		console.error("Error fetching IP or Org:", error);
+		sourceInfo = `IP: ***.***.***.*** - Org: Not Available`
 	}
-
-	return;
-
-
-
 
 	try {
 		const pingResp = await fetchWithTimeout(`https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/ping`, 5000);
