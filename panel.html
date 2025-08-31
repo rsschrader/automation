@@ -1,20 +1,9 @@
-<div id="results-panel" style="
-    display:flex; flex-direction:column;
-    max-height:60vh; border:1px solid #ddd; border-radius:8px;
-    background:#fff;">
+<div id="actions-plan" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+  <button id="run-test-plan-status" style="display:none">Status Plan</button>
+  <button id="run-test-plan-button" style="display:none">Run Plan</button>
+</div>
 
-    <!-- Buttons stay on top -->
-    <div id="actions" style="
-        position:sticky; top:0; z-index:1;
-        display:flex; gap:8px; align-items:center; padding:8px;
-        background:#fff; border-bottom:1px solid #eee;">
-        <button id="run-test-plan-button">Run TestPlan TestExecutions 1</button>
-        <button id="run-test-execution-button">Run TestExecution XrayTests 1</button>
-    </div>
-
-    <!-- Only this scrolls -->
-    <div id="script-response-message" aria-live="polite" style="
-        flex:1; overflow:auto; padding:8px;
-        white-space:pre-wrap; word-break:break-word; font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;">
-    </div>
+<div id="actions-execution" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+  <button id="run-test-execution-status" style="display:none">Status Execution</button>
+  <button id="run-test-execution-button" style="display:none">Run Execution</button>
 </div>
