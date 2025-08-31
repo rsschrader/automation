@@ -12,15 +12,30 @@ function attachScriptRunnerButtonListener() {
 
     if (!["QA-62750", "QA-62632", "QA-45036"].includes(issueKey)) { return; }
 
-    const fetchWithTimeout = (url, options = {}, timeout = 300000) => {
-        const controller = new AbortController();
-        const tid = setTimeout(() => controller.abort(), timeout);
-        return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(tid));
-    };
+	function fetchWithTimeout(url, timeout) {
+		const controller = new AbortController();
+		const tid = setTimeout(() => controller.abort(), timeout);
+		return fetch(url, { method: "GET", signal: controller.signal }).finally(() => clearTimeout(tid));
+	}
+
+    const pingUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/ping`;
+    fetchWithTimeout(pingUrl, 2500)
+    .then((response) => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.json();
+    })
+    .then((data) => {
+		messageBox.innerText = `${JSON.stringify(data, null, 2)}`;
+    })
+    .catch((error) => {
+        console.error("Caught error in /type fetch:", error);
+        messageBox.innerText = "PINGGGGG network. (on-site or via VPN)" + error.message;
+		return rror.message;
+    });
 
     const runAutomation = () => {
         const runUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/run?JiraIssueType=${issueType}&JiraIssueKey=${issueKey}&FullError=false`;
-        return fetchWithTimeout(runUrl, { method: "GET" })
+        return fetchWithTimeout(runUrl, 300000)
         .then(async (response) => {
 			const bodyText = await response.text(); let bodyJson = null;
       		try { bodyJson = bodyText ? JSON.parse(bodyText) : null; } catch {}
@@ -38,7 +53,7 @@ function attachScriptRunnerButtonListener() {
     };
 
     const typeUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/type?JiraIssueKey=${issueKey}&FullError=false`;
-    fetchWithTimeout(typeUrl, { method: "GET" })
+    fetchWithTimeout(typeUrl, 15000)
     .then((response) => {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         return response.json();
