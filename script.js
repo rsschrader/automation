@@ -25,7 +25,6 @@ async function attachScriptRunnerButtonListener() {
 		const pingResp = await fetchWithTimeout(`https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/ping`, 2500);
 		if (!pingResp.ok) throw new Error(`HTTP ${pingResp.status}`);
 		const pingData = await pingResp.json();
-		messageBox.innerText = "Test Automation Service is Online"
 	} catch (error) {
 		console.error("Caught error during initial /ping:", error);
 		messageBox.innerText =
@@ -65,10 +64,12 @@ async function attachScriptRunnerButtonListener() {
         let activeButton = null;
         switch (issueType) {
             case "TestPlan":
-                buttonPlan.style.display = "block";
+                buttonPlan.style.display = "block"; 
+				messageBox.innerText = "Test Automation Service is Online"
                 activeButton = buttonPlan; break;   
             case "TestExecution":
                 buttonExecution.style.display = "block";
+				messageBox.innerText = "Test Automation Service is Online"
                 activeButton = buttonExecution; break;
             default:
                 messageBox.innerText = "Test Automation is accessible only from TestPlans or TestExecutions";
