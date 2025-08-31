@@ -4,9 +4,11 @@
   }
   html, body { font-family: var(--ds-font-family-heading); }
 
+  #run-test-plan-status,
   #run-test-plan-button,
+  #run-test-execution-status,
   #run-test-execution-button {
-    background-color: #013c95;
+    background-color: #0045ac;
     color: white;
     padding: 6px 12px;
     border: none;
@@ -16,7 +18,9 @@
     font-family: inherit;
     margin: 0px 8px 8px -7px;
   }
+  #run-test-plan-status:hover,
   #run-test-plan-button:hover,
+  #run-test-execution-status:hover,
   #run-test-execution-button:hover {
     background-color: #0052cc;
   }
