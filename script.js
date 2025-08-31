@@ -10,6 +10,57 @@ async function attachScriptRunnerButtonListener() {
     if (!buttonPlan || !buttonExecution || !messageBox) {
         setTimeout(attachScriptRunnerButtonListener, 200); return;
     }
+
+
+	if (buttonPlan) {
+		buttonPlan.style.display = "block"; 
+	  	buttonPlan.addEventListener("click", async function () {
+	    messageBox.innerText = ">> Fetching public IP...";
+	    messageBox.style.color = "black";
+	
+	    try {
+	      // Helper to add timeout to fetch
+	      const fetchWithTimeout = (url, options = {}, timeout = 5000) => {
+	        return Promise.race([
+	          fetch(url, options),
+	          new Promise((_, reject) =>
+	            setTimeout(() => reject(new Error("Request timed out")), timeout)
+	          )
+	        ]);
+	      };
+	
+	      // 1. Get the public IP
+	      const ipRes = await fetchWithTimeout("https://api.ipify.org?format=json");
+	      if (!ipRes.ok) throw new Error(`IP API failed: ${ipRes.status}`);
+	
+	      const ipData = await ipRes.json();
+	      const ip = ipData?.ip;
+	      if (!ip) throw new Error("No IP address returned");
+	
+	      // Show IP while fetching org info
+	      messageBox.innerText = `IP: ${ip} - Fetching organization info...`;
+	
+	      // 2. Get organization info for that IP
+	      const orgRes = await fetchWithTimeout(
+	        `https://ipinfo.io/${ip}/org`
+	      );
+	      if (!orgRes.ok) throw new Error(`Org API failed: ${orgRes.status}`);
+	
+	      const org = await orgRes.text();
+	
+	      // 3. Display final result
+	      messageBox.innerText = `IP: ${ip} - Org: ${org}`;
+	    } catch (err) {
+	      console.error("Error fetching IP or Org:", err);
+	      messageBox.innerText = `Fetch error: ${err.message}`;
+	      messageBox.style.color = "red";
+	    }
+	  });
+	}
+
+	return;
+
+
     buttonPlan.style.display = "none"; buttonExecution.style.display = "none";
 	messageBox.innerText = "Test Automation Service Connecting ..."; 
 
