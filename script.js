@@ -70,7 +70,7 @@ function attachScriptRunnerButtonListener() {
     })
     .catch((error) => {
         console.error("Caught error in /type fetch:", error);
-        messageBox.innerText = "Test Automation is accessible only from the corporate network. (on-site or via VPN)";
+        messageBox.innerText = "Test Automation is accessible only from the corporate network. (on-site or via VPN)" + error.message;
     });
 }
 document.addEventListener("DOMContentLoaded", attachScriptRunnerButtonListener);
