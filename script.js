@@ -4,9 +4,6 @@ async function attachScriptRunnerButtonListener() {
     const statusExecution = document.getElementById("run-test-execution-status");
     const buttonExecution = document.getElementById("run-test-execution-button");
     const messageBox = document.getElementById("script-response-message");
-
-	/*TO DELETE*/if (!["QA-62750", "QA-62632", "QA-45036"].includes(issueKey)) { return; }
-
     if (!statusPlan || !buttonPlan || !statusExecution || !buttonExecution || !messageBox) {
         setTimeout(attachScriptRunnerButtonListener, 200); return;
     }
@@ -21,6 +18,8 @@ async function attachScriptRunnerButtonListener() {
     messageBox.innerText = "Test Automation Service Connecting ..."; 
     let issueType = ""; let sourceInfo = "";
     hide(boxPlan); hide(boxExecution);
+
+	/*TO DELETE*/if (!["QA-62750", "QA-62632", "QA-45036"].includes(issueKey)) { return; }
 	
 	function fetchWithTimeout(url, timeout) {
 		const controller = new AbortController();
