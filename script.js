@@ -12,9 +12,9 @@ async function attachScriptRunnerButtonListener() {
 
     if (!["QA-62750", "QA-62632", "QA-45036"].includes(issueKey)) { return; }
 
-	messageBox.innerText = "Test Automation Service Connecting ..."
-	const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-	await sleep(1000); 
+	//messageBox.innerText = "Test Automation Service Connecting ..."
+	//const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+	//await sleep(1000); 
 
 	function fetchWithTimeout(url, timeout) {
 		const controller = new AbortController();
