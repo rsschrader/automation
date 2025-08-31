@@ -19,7 +19,7 @@ function attachScriptRunnerButtonListener() {
     };
 
     const runAutomation = () => {
-        const runUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/run?JiraIssueType=${issueType}&JiraIssueKey=${issueKey}`;
+        const runUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/run?JiraIssueType=${issueType}&JiraIssueKey=${issueKey}&FullError=false`;
         return fetchWithTimeout(runUrl, { method: "GET" })
         .then(async (response) => {
 			const bodyText = await response.text(); let bodyJson = null;
@@ -37,7 +37,7 @@ function attachScriptRunnerButtonListener() {
         });
     };
 
-    const typeUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/type?JiraIssueKey=${issueKey}`;
+    const typeUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/type?JiraIssueKey=${issueKey}&FullError=false`;
     fetchWithTimeout(typeUrl, { method: "GET" })
     .then((response) => {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
