@@ -9,12 +9,11 @@ async function attachScriptRunnerButtonListener() {
         setTimeout(attachScriptRunnerButtonListener, 200); return;
     }
     buttonPlan.style.display = "none"; buttonExecution.style.display = "none";
+	const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-    if (!["QA-62750", "QA-62632", "QA-45036"].includes(issueKey)) { return; }
+    /*TO DELETE*/if (!["QA-62750", "QA-62632", "QA-45036"].includes(issueKey)) { return; }
 
-	//messageBox.innerText = "Test Automation Service Connecting ..."
-	//const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-	//await sleep(1000); 
+
 
 	function fetchWithTimeout(url, timeout) {
 		const controller = new AbortController();
@@ -27,6 +26,7 @@ async function attachScriptRunnerButtonListener() {
 		const pingData = await pingResp.json();
 	} catch (error) {
 		console.error("Caught error during initial /ping:", error);
+		messageBox.innerText = "Test Automation Service Connecting ..."; await sleep(2000); 
 		messageBox.innerText =
 		error.message === "Failed to fetch"
 			? "Test Automation is accessible only from the corporate network. (on-site or via VPN)"
