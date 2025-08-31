@@ -12,16 +12,16 @@
     border: none;
     border-radius: 3px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 15px;
     font-family: inherit;
-    margin: 0 8px 8px 0;   /* right + bottom spacing */
+    margin: 0px 8px 8px -7px;
   }
   #run-test-plan-button:hover,
   #run-test-execution-button:hover {
     background-color: #0065ff;
   }
   #script-response-message {
-    margin-top: 12px;      /* space from buttons */
+    margin-top: 12px;
     font-size: 14px;
     color: black;
   }
