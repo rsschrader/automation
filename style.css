@@ -16,7 +16,7 @@
     cursor: pointer;
     font-size: 15px;
     font-family: inherit;
-    margin: 0px 8px 8px -7px;
+    margin: 0px 8px 0px -7px;
   }
   #run-test-plan-status:hover,
   #run-test-plan-button:hover,
@@ -25,7 +25,7 @@
     background-color: #0052cc;
   }
   #script-response-message {
-    margin-top: 12px;
+    margin-top: 10px;
     font-size: 14px;
     color: black;
   }
