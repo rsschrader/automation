@@ -1,19 +1,27 @@
 async function attachScriptRunnerButtonListener() {
+    const statusPlan = document.getElementById("run-test-plan-status");
     const buttonPlan = document.getElementById("run-test-plan-button");
+    const statusExecution = document.getElementById("run-test-execution-status");
     const buttonExecution = document.getElementById("run-test-execution-button");
     const messageBox = document.getElementById("script-response-message");
-    const issueKey = window.AdaptavistBridgeContext?.context?.issueKey;
-    let issueType = ""; let sourceInfo = "";
 
 	/*TO DELETE*/if (!["QA-62750", "QA-62632", "QA-45036"].includes(issueKey)) { return; }
 
-    if (!buttonPlan || !buttonExecution || !messageBox) {
+    if (!statusPlan || !buttonPlan || !statusExecution || !buttonExecution || !messageBox) {
         setTimeout(attachScriptRunnerButtonListener, 200); return;
     }
-    buttonPlan.style.display = "none"; buttonExecution.style.display = "none";
-	messageBox.innerText = "Test Automation Service Connecting ..."; 
 
-	const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+    const boxPlan = document.getElementById('actions-plan');
+    const boxExecution = document.getElementById('actions-execution');
+    function show(box) { if (box) box.style.display = 'flex'; }
+    function hide(box) { if (box) box.style.display = 'none'; }
+
+    const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+    const issueKey = window.AdaptavistBridgeContext?.context?.issueKey;
+    messageBox.innerText = "Test Automation Service Connecting ..."; 
+    let issueType = ""; let sourceInfo = "";
+    hide(boxPlan); hide(boxExecution);
+	
 	function fetchWithTimeout(url, timeout) {
 		const controller = new AbortController();
 		const tid = setTimeout(() => controller.abort(), timeout);
