@@ -13,17 +13,8 @@ async function attachScriptRunnerButtonListener() {
     if (!panelPlan || !statusPlan || !buttonPlan || !panelExecution || !statusExecution || !buttonExecution || !messageBox || !issueKey) {
         setTimeout(attachScriptRunnerButtonListener, 200); return;
     }
-    function showPanel(panelItems) { 
-        if (panelItems) {
-            panelItems.style.display = 'flex'; 
-        }
-    }
-    function hidePanel(panelItems) { 
-        if (panelItems) {
-            panelItems.style.display = 'none'; 
-        }
-    }
-    hidePanel(panelPlan); hidePanel(panelExecution);
+    hideRow(panelPlan, [statusPlan, buttonPlan]);
+    hideRow(panelExecution, [statusExecution, buttonExecution]);
 
 	/*TO DELETE*/if (!["QA-62750", "QA-62632", "QA-45036"].includes(issueKey)) { return; }
 	
@@ -111,25 +102,11 @@ async function attachScriptRunnerButtonListener() {
         let statusButton = null; let activeButton = null; 
         switch (issueType) {
             case "TestPlan":
-                showPanel(panelPlan); 
-
-                panelPlan.style.display = 'flex'; 
-                panelPlan.style.display = 'block'; 
-
-                statusPlan.style.display = "block"; 
-                buttonPlan.style.display = "block"; 
-
+                showRow(panelPlan, [statusPlan, buttonPlan]);
                 statusButton = statusPlan; activeButton = buttonPlan; 
                 messageBox.innerText = "Test Automation Service is Online. Plan"; break;   
             case "TestExecution":
-                showPanel(panelExecution); 
-
-                panelExecution.style.display = 'flex'; 
-                panelExecution.style.display = 'block'; 
-
-                statusExecution.style.display = "block"; 
-                buttonExecution.style.display = "block"; 
-
+                showRow(panelExecution, [statusExecution, buttonExecution]);
                 statusButton = statusExecution; activeButton = buttonExecution; 
                 messageBox.innerText = "Test Automation Service is Online. Executions"; break;
             default:
@@ -162,5 +139,32 @@ async function attachScriptRunnerButtonListener() {
         console.error("Caught error in /type fetch:", error);
         messageBox.innerText = "Test Automation Process Error (" + error.message + ") Please contact SVT admin group";
     });
+
+    function showRow(rowElement, btnElements) {
+        rowElement.hidden = false;
+        rowElement.removeAttribute('aria-hidden');
+        rowElement.classList.remove('hidden','aui-hide','sr-hidden','sr-hide');
+        rowElement.style.setProperty('display', 'flex', 'important');
+        rowElement.style.flexDirection = 'row';
+        rowElement.style.alignItems = 'center';
+        rowElement.style.flexWrap = 'wrap';
+        rowElement.style.gap = '8px';
+        (btnElements || []).forEach(btnElement => {
+            btnElement.hidden = false;
+            btnElement.style.display = 'inline-flex'; // side-by-side
+            btnElement.style.flex = '0 0 auto';
+            btnElement.style.width = 'auto';
+        });
+    }
+    function hideRow(rowElement, btnElements) {
+        (btnElements || []).forEach(btnElement => { 
+            btnElement.hidden = true; 
+            btnElement.style.setProperty('display','none','important'); 
+        });
+        rowElement.hidden = true;
+        rowElement.setAttribute('aria-hidden','true');
+        rowElement.classList.add('sr-hide');
+        rowElement.style.setProperty('display','none','important');
+    }
 }
 document.addEventListener("DOMContentLoaded", attachScriptRunnerButtonListener);
