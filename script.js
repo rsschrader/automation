@@ -18,43 +18,18 @@ function attachScriptRunnerButtonListener() {
 		return fetch(url, { method: "GET", signal: controller.signal }).finally(() => clearTimeout(tid));
 	}
 
-	const pingUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/ping`;
-	fetchWithTimeout(pingUrl, 2500)
-	.then((response) => {
-		if (!response.ok) throw new Error(`HTTP ${response.status}`);
-		return response.json();
-	})
-	.then((data) => {
-		messageBox.innerText = `${JSON.stringify(data, null, 2)}`;
-	})
-	.catch((error) => {
-		console.error("Caught error in /type fetch:", error);
-		if(error.message === "Failed to fetch") {
-			messageBox.innerText = "Test Automation is accessible only from the corporate network. (on-site or via VPN)";
-		} else {
-			messageBox.innerText = "Service is Offline: " + error.message;
-		}
-		throw error;
-	});
-
-	const buttonPing = document.getElementById("run-test_ping-script"); buttonPing.style.display = "block";
-	if (buttonPing) {
-	  	buttonPing.addEventListener("click", async function () {
-			const pingUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/ping`;
-			fetchWithTimeout(pingUrl, 2500)
-			.then((response) => {
-				if (!response.ok) throw new Error(`HTTP ${response.status}`);
-				return response.json();
-			})
-			.then((data) => {
-				messageBox.innerText = `${JSON.stringify(data, null, 2)}`;
-			})
-			.catch((error) => {
-				console.error("Caught error in /type fetch:", error);
-				messageBox.innerText = "PING network >> " + error.message;
-				return error.message;
-			});
-	  	});
+	try {
+		const pingResp = await fetchWithTimeout(`https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/ping`, 2500);
+		if (!pingResp.ok) throw new Error(`HTTP ${pingResp.status}`);
+		const pingData = await pingResp.json();
+		messageBox.innerText = JSON.stringify(pingData, null, 2);
+	} catch (error) {
+		console.error("Caught error during initial /ping:", error);
+		messageBox.innerText =
+		error.message === "Failed to fetch"
+			? "Test Automation is accessible only from the corporate network. (on-site or via VPN)"
+			: "Service is Offline: " + error.message;
+		return; 
 	}
 
     const runAutomation = () => {
