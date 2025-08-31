@@ -54,6 +54,7 @@ async function attachScriptRunnerButtonListener() {
 	}
 
     const runStatus = () => {
+        messageBox.innerText = "Test Automation Status ..."; 
         const runUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/status?JiraIssueType=${issueType}&JiraIssueKey=${issueKey}&FullError=false`;
         return fetchWithTimeout(runUrl, 300000)
         .then(async (response) => {
@@ -73,6 +74,7 @@ async function attachScriptRunnerButtonListener() {
     };
 
     const runAutomation = () => {
+        messageBox.innerText = "Test Automation Processing ..."; 
         const runUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/run?JiraIssueType=${issueType}&JiraIssueKey=${issueKey}&FullError=false`;
         return fetchWithTimeout(runUrl, 300000)
         .then(async (response) => {
