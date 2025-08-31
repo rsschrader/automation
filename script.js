@@ -1,4 +1,4 @@
-function attachScriptRunnerButtonListener() {
+async function attachScriptRunnerButtonListener() {
     const buttonPlan = document.getElementById("run-test-plan-script");
     const buttonExecution = document.getElementById("run-test-execution-script");
     const messageBox = document.getElementById("script-response-message");
