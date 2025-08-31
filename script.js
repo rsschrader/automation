@@ -18,28 +18,24 @@ function attachScriptRunnerButtonListener() {
 		return fetch(url, { method: "GET", signal: controller.signal }).finally(() => clearTimeout(tid));
 	}
 
-	const buttonPing = document.getElementById("run-test_ping-script");
+	const buttonPing = document.getElementById("run-test_ping-script"); buttonPing.style.display = "block";
 	if (buttonPing) {
-		buttonPing.style.display = "block";
-		buttonPing.addEventListener("click", function () {
-			const pingUrl = addNoCache("https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/ping");
-
-			fetchWithTimeout(pingUrl, 2500)
-			.then((res) => {
-				if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
-				const ct = (res.headers.get("content-type") || "").toLowerCase();
-				return ct.includes("application/json") ? res.json() : res.text();
+	  	buttonPing.addEventListener("click", async function () {
+			const pingUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/ping`;
+			fetchWithTimeout(pingUrl, 300000)
+			.then((response) => {
+				if (!response.ok) throw new Error(`HTTP ${response.status}`);
+				return response.json();
 			})
-			.then((body) => {
-				messageBox.innerText =
-				typeof body === "string" ? body : JSON.stringify(body, null, 2);
+			.then((data) => {
+				messageBox.innerText = `${JSON.stringify(data, null, 2)}`;
 			})
-			.catch((err) => {
-				const msg = err?.name === "AbortError" ? "timeout" : err?.message || String(err);
-				console.error("Ping error:", msg);
-				messageBox.innerText = `Ping failed: ${msg}`;
+			.catch((error) => {
+				console.error("Caught error in /type fetch:", error);
+				messageBox.innerText = "PINGGGGG network. (on-site or via VPN)" + error.message;
+				return error.message;
 			});
-		});
+	  	});
 	}
 
     const runAutomation = () => {
