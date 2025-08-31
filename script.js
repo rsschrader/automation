@@ -22,7 +22,7 @@ function attachScriptRunnerButtonListener() {
 	if (buttonPing) {
 	  	buttonPing.addEventListener("click", async function () {
 			const pingUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/ping`;
-			fetchWithTimeout(pingUrl, 300000)
+			fetchWithTimeout(pingUrl, 2500)
 			.then((response) => {
 				if (!response.ok) throw new Error(`HTTP ${response.status}`);
 				return response.json();
