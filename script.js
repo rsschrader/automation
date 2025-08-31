@@ -12,7 +12,7 @@ async function attachScriptRunnerButtonListener() {
     }
     buttonPlan.style.display = "none"; buttonExecution.style.display = "none";
 	messageBox.innerText = "Test Automation Service Connecting ..."; 
-	
+
 	const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 	function fetchWithTimeout(url, timeout) {
 		const controller = new AbortController();
@@ -20,7 +20,7 @@ async function attachScriptRunnerButtonListener() {
 		return fetch(url, { method: "GET", signal: controller.signal }).finally(() => clearTimeout(tid));
 	}
 	try {
-		const pingResp = await fetchWithTimeout(`https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/ping`, 2500);
+		const pingResp = await fetchWithTimeout(`https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/ping`, 5000);
 		if (!pingResp.ok) throw new Error(`HTTP ${pingResp.status}`);
 		const pingData = await pingResp.json();
 	} catch (error) {
