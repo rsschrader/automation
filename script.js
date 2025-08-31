@@ -13,8 +13,16 @@ async function attachScriptRunnerButtonListener() {
     if (!panelPlan || !statusPlan || !buttonPlan || !panelExecution || !statusExecution || !buttonExecution || !messageBox || !issueKey) {
         setTimeout(attachScriptRunnerButtonListener, 200); return;
     }
-    function showPanel(panelItems) { if (panelItems) panelItems.style.display = 'flex'; }
-    function hidePanel(panelItems) { if (panelItems) panelItems.style.display = 'none'; }
+    function showPanel(panelItems) { 
+        if (panelItems) {
+            panelItems.style.display = 'flex'; 
+        }
+    }
+    function hidePanel(panelItems) { 
+        if (panelItems) {
+            panelItems.style.display = 'none'; 
+        }
+    }
     hidePanel(panelPlan); hidePanel(panelExecution);
 
 	/*TO DELETE*/if (!["QA-62750", "QA-62632", "QA-45036"].includes(issueKey)) { return; }
