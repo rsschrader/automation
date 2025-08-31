@@ -12,17 +12,17 @@ async function attachScriptRunnerButtonListener() {
 
     if (!["QA-62750", "QA-62632", "QA-45036"].includes(issueKey)) { return; }
 
+	messageBox.innerText = "Test Automation Service Connecting ..."
 	function fetchWithTimeout(url, timeout) {
 		const controller = new AbortController();
 		const tid = setTimeout(() => controller.abort(), timeout);
 		return fetch(url, { method: "GET", signal: controller.signal }).finally(() => clearTimeout(tid));
 	}
-
 	try {
 		const pingResp = await fetchWithTimeout(`https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/ping`, 2500);
 		if (!pingResp.ok) throw new Error(`HTTP ${pingResp.status}`);
 		const pingData = await pingResp.json();
-		messageBox.innerText = JSON.stringify(pingData, null, 2);
+		messageBox.innerText = "Test Automation Service is Online"
 	} catch (error) {
 		console.error("Caught error during initial /ping:", error);
 		messageBox.innerText =
