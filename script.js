@@ -30,7 +30,7 @@ function attachScriptRunnerButtonListener() {
     .catch((error) => {
         console.error("Caught error in /type fetch:", error);
         messageBox.innerText = "PINGGGGG network. (on-site or via VPN)" + error.message;
-		return rror.message;
+		return error.message;
     });
 
     const runAutomation = () => {
