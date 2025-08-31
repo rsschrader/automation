@@ -13,8 +13,6 @@ async function attachScriptRunnerButtonListener() {
 
     /*TO DELETE*/if (!["QA-62750", "QA-62632", "QA-45036"].includes(issueKey)) { return; }
 
-
-
 	function fetchWithTimeout(url, timeout) {
 		const controller = new AbortController();
 		const tid = setTimeout(() => controller.abort(), timeout);
