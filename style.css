@@ -1,1 +1,16 @@
 
+/* Define your Atlassian stack once */
+:root {
+  --ds-font-family-heading: "Atlassian Sans", ui-sans-serif, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Ubuntu, "Helvetica Neue", sans-serif;
+}
+
+/* Apply globally */
+html, body {
+  font-family: var(--ds-font-family-heading);
+}
+
+/* Make form controls inherit the same font */
+button, input, select, textarea {
+  font: inherit;
+}
