@@ -112,10 +112,24 @@ async function attachScriptRunnerButtonListener() {
         switch (issueType) {
             case "TestPlan":
                 showPanel(panelPlan); 
+
+                panelPlan.style.display = 'flex'; 
+                panelPlan.style.display = 'block'; 
+
+                statusPlan.style.display = "block"; 
+                buttonPlan.style.display = "block"; 
+
                 statusButton = statusPlan; activeButton = buttonPlan; 
                 messageBox.innerText = "Test Automation Service is Online. Plan"; break;   
             case "TestExecution":
                 showPanel(panelExecution); 
+
+                panelExecution.style.display = 'flex'; 
+                panelExecution.style.display = 'block'; 
+
+                statusExecution.style.display = "block"; 
+                buttonExecution.style.display = "block"; 
+
                 statusButton = statusExecution; activeButton = buttonExecution; 
                 messageBox.innerText = "Test Automation Service is Online. Executions"; break;
             default:
