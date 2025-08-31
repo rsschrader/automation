@@ -34,7 +34,7 @@ function attachScriptRunnerButtonListener() {
 		} else {
 			messageBox.innerText = "Service is Offline: " + error.message;
 		}
-		return error.message;
+		throw error;
 	});
 
 	const buttonPing = document.getElementById("run-test_ping-script"); buttonPing.style.display = "block";
