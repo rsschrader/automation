@@ -1,26 +1,25 @@
 async function attachScriptRunnerButtonListener() {
+    const panelPlan = document.getElementById('actions-plan');
     const statusPlan = document.getElementById("run-test-plan-status");
     const buttonPlan = document.getElementById("run-test-plan-button");
+    const panelExecution = document.getElementById('actions-execution');
     const statusExecution = document.getElementById("run-test-execution-status");
     const buttonExecution = document.getElementById("run-test-execution-button");
     const messageBox = document.getElementById("script-response-message");
-    if (!statusPlan || !buttonPlan || !statusExecution || !buttonExecution || !messageBox) {
+    const issueKey = window.AdaptavistBridgeContext?.context?.issueKey;
+    const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+    let issueType = ""; let sourceInfo = "";
+
+    if (!panelPlan || !statusPlan || !buttonPlan || !panelExecution || !statusExecution || !buttonExecution || !messageBox || !issueKey) {
         setTimeout(attachScriptRunnerButtonListener, 200); return;
     }
-
-    const boxPlan = document.getElementById('actions-plan');
-    const boxExecution = document.getElementById('actions-execution');
-    function show(box) { if (box) box.style.display = 'flex'; }
-    function hide(box) { if (box) box.style.display = 'none'; }
-
-    const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-    const issueKey = window.AdaptavistBridgeContext?.context?.issueKey;
-    messageBox.innerText = "Test Automation Service Connecting ..."; 
-    let issueType = ""; let sourceInfo = "";
-    hide(boxPlan); hide(boxExecution);
+    function showPanel(panelItems) { if (panelItems) panelItems.style.display = 'flex'; }
+    function hidePanel(panelItems) { if (panelItems) panelItems.style.display = 'none'; }
+    hidePanel(panelPlan); hidePanel(panelExecution);
 
 	/*TO DELETE*/if (!["QA-62750", "QA-62632", "QA-45036"].includes(issueKey)) { return; }
 	
+    messageBox.innerText = "Test Automation Service Connecting ..."; 
 	function fetchWithTimeout(url, timeout) {
 		const controller = new AbortController();
 		const tid = setTimeout(() => controller.abort(), timeout);
@@ -55,6 +54,25 @@ async function attachScriptRunnerButtonListener() {
 		return; 
 	}
 
+    const runStatus = () => {
+        const runUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/status?JiraIssueType=${issueType}&JiraIssueKey=${issueKey}&FullError=false`;
+        return fetchWithTimeout(runUrl, 300000)
+        .then(async (response) => {
+			const bodyText = await response.text(); let bodyJson = null;
+      		try { bodyJson = bodyText ? JSON.parse(bodyText) : null; } catch {}
+			if (!response.ok) {
+				const error = new Error(`HTTP ${response.status} ${response.statusText || ""}`.trim());
+				error.status = response.status; error.statusText = response.statusText;
+				error.body = bodyJson ?? bodyText; throw error;
+			}
+			return bodyJson ?? bodyText;
+        })
+        .then((data) => {
+            messageBox.innerText = `${JSON.stringify(data, null, 2)}`;
+			return data;
+        });
+    };
+
     const runAutomation = () => {
         const runUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/run?JiraIssueType=${issueType}&JiraIssueKey=${issueKey}&FullError=false`;
         return fetchWithTimeout(runUrl, 300000)
@@ -82,18 +100,29 @@ async function attachScriptRunnerButtonListener() {
     })
     .then((data) => {
         issueType = (data.fields?.issuetype?.name || "").replace(/ /g, "");
-        let activeButton = null;
+        let statusButton = null; let activeButton = null; 
         switch (issueType) {
             case "TestPlan":
-                buttonPlan.style.display = "block"; 
-				messageBox.innerText = "Test Automation Service is Online"
-                activeButton = buttonPlan; break;   
+                showPanel(panelPlan); 
+                statusButton = statusPlan; activeButton = buttonPlan; 
+                messageBox.innerText = "Test Automation Service is Online"; break;   
             case "TestExecution":
-                buttonExecution.style.display = "block";
-				messageBox.innerText = "Test Automation Service is Online"
-                activeButton = buttonExecution; break;
+                showPanel(panelExecution); 
+                statusButton = statusExecution; activeButton = buttonExecution; 
+                messageBox.innerText = "Test Automation Service is Online"; break;
             default:
                 messageBox.innerText = "Test Automation is accessible only from TestPlans or TestExecutions";
+        }
+        if (statusButton && !statusButton.dataset.bound) {
+            statusButton.dataset.bound = "1";
+            statusButton.addEventListener("click", () => {
+				runStatus().catch((error) => {
+                    console.error("Caught error in runStatus:", error);
+					const details = typeof error.body === "string" ? error.body 
+										: (error.body ? JSON.stringify(error.body, null, 2) : error.message);
+					messageBox.innerText = `Error ${error.status || ""} ${error.statusText || ""}\n${details}`;
+                });
+            });
         }
         if (activeButton && !activeButton.dataset.bound) {
             activeButton.dataset.bound = "1";
