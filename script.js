@@ -68,7 +68,8 @@ async function attachScriptRunnerButtonListener() {
 			return bodyJson ?? bodyText;
         })
         .then((data) => {
-            messageBox.innerText = buildSummary(`${JSON.stringify(data, null, 2)}`);
+            //messageBox.innerText = 
+            buildSummary(`${JSON.stringify(data, null, 2)}`);
 			return data;
         });
     };
@@ -144,7 +145,7 @@ async function attachScriptRunnerButtonListener() {
 
     function buildSummary(data) {
         messageBox.innerText = data;
-        await sleep(10000); 
+
         const totalExecutions = Array.isArray(data) ? data.length : 0;
         const order = ["TO DO", "IN PROGRESS", "PASSED", "FAILED"];
         const counts = Object.fromEntries(order.map(s => [s, 0]));
