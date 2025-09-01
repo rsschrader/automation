@@ -68,7 +68,7 @@ async function attachScriptRunnerButtonListener() {
 			return bodyJson ?? bodyText;
         })
         .then((data) => {
-            messageBox.innerText = `${JSON.stringify(data, null, 2)}`;
+            messageBox.innerText = buildRunsStatusText(`${JSON.stringify(data, null, 2)}`);
 			return data;
         });
     };
@@ -141,6 +141,29 @@ async function attachScriptRunnerButtonListener() {
         console.error("Caught error in /type fetch:", error);
         messageBox.innerText = "Test Automation Process Error (" + error.message + ") Please contact SVT admin group";
     });
+
+    function buildRunsStatusText(executions) {
+        const totalExecutions = Array.isArray(executions) ? executions.length : 0;
+        const nowLocalString = () => {
+            const d = new Date();
+            const pad = n => String(n).padStart(2, "0");
+            return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ` +
+            `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+        };
+
+        const order = ["TO DO", "IN PROGRESS", "PASSED", "FAILED"];
+        const counts = Object.fromEntries(order.map(s => [s, 0]));
+        for (const exec of executions ?? []) {
+            for (const run of exec?.TestRunsJiraKeys ?? []) {
+                const status = String(run?.TestStatus ?? "").trim().toUpperCase();
+                if (status in counts) counts[status]++;
+            }
+        }
+        const line1 = `Test Execution [${totalExecutions}]`;
+        const line2 = `Runs Status [${nowLocalString}]`;
+        const line3 = order.map(s => `${s} [${counts[s]}]`).join("   ");
+        return `${line1}\n${line2}\n\n${line3}`;
+    }
 
     function showRow(rowElement, btnElements) {
         rowElement.hidden = false;
