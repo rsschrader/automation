@@ -143,19 +143,46 @@ async function attachScriptRunnerButtonListener() {
         messageBox.innerText = "Test Automation Process Error (" + error.message + ") Please contact SVT admin group";
     });
 
-    function buildSummary(data) {
-        const totalExecutions = Array.isArray(data) ? data.length : 0;
+    function buildSummary(raw) {
+        const arr = normalizeToArray(raw);
         const order = ["TO DO", "IN PROGRESS", "PASSED", "FAILED"];
         const counts = Object.fromEntries(order.map(s => [s, 0]));
-        for (const exec of data || []) {
-            for (const run of exec.TestRunsJiraKeys || []) {
-                const status = String(run.TestStatus || "").toUpperCase().trim();
-                if (status in counts) counts[status] += 1;
+
+        for (const exec of arr) {
+            const runs = Array.isArray(exec?.TestRunsJiraKeys) ? exec.TestRunsJiraKeys : [];
+            for (const run of runs) {
+                const norm = normalizeStatus(run?.TestStatus);
+                if (norm && norm in counts) counts[norm] += 1;
             }
         }
-        const line1 = `Test Execution [${totalExecutions}]`;
+        const line1 = `Test Execution [${arr.length}]`;
         const line2 = order.map(s => `${s} [${counts[s]}]`).join('   ');
         return `${line1}\n\n${line2}`;
+    }
+
+    function normalizeToArray(raw) {
+        // If it's a string, try to parse JSON
+        if (typeof raw === "string") {
+            try { raw = JSON.parse(raw); } catch { return []; }
+        }
+        // Already an array
+        if (Array.isArray(raw)) return raw;
+        // Single object case
+        if (raw && typeof raw === "object" && "TestExecutionJiraKey" in raw) return [raw];
+        // Common wrappers (adjust if your service uses a different key)
+        for (const k of ["data", "value", "results", "items"]) {
+            if (Array.isArray(raw?.[k])) return raw[k];
+        }
+        return [];
+    }
+
+    function normalizeStatus(s) {
+        const t = String(s || "").trim().toUpperCase().replace(/\s+/g, " ");
+        if (t === "TO DO" || t === "TO_DO" || t === "TODO") return "TO DO";
+        if (t === "IN PROGRESS" || t === "IN_PROGRESS") return "IN PROGRESS";
+        if (t === "PASSED" || t === "PASS") return "PASSED";
+        if (t === "FAILED" || t === "FAIL") return "FAILED";
+        return ""; // unknown status -> ignore
     }
 
     function showRow(rowElement, btnElements) {
