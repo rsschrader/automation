@@ -13,7 +13,7 @@ async function attachScriptRunnerButtonListener() {
     if (!panelPlan || !statusPlan || !buttonPlan || !panelExecution || !statusExecution || !buttonExecution || !messageBox || !issueKey) {
         setTimeout(attachScriptRunnerButtonListener, 200); return;
     }
-    /*TO DELETE*/if (!["QA-62750", "QA-62632", "QA-62751", "QA-45036"].includes(issueKey)) { return; }
+    /*TO DELETE*/if (!["QA-62750", "QA-62632", "QA-62751", "QA-45036", "QA-62914"].includes(issueKey)) { return; }
 
     messageBox.innerText = "Test Automation Service Connecting ..."; 
     hideRow(panelPlan, [statusPlan, buttonPlan]);
