@@ -22,11 +22,22 @@ async function attachScriptRunnerButtonListener() {
   if (__srInitialized) return;
 
   // Wait for ScriptRunner context FIRST (issueKey is injected async)
-  const issueKey = await waitForIssueKey({ timeoutMs: 12000, pollMs: 150 });
-  if (!issueKey) {
-    console.error("ScriptRunner: issueKey not available (timed out). Are you on an Issue view?");
-    return;
-  }
+  //const issueKey = await waitForIssueKey({ timeoutMs: 12000, pollMs: 150 });
+  //if (!issueKey) {
+  //  console.error("ScriptRunner: issueKey not available (timed out). Are you on an Issue view?");
+  //  return;
+  //}
+  // Force Adaptavist bridge initialization
+  await AdaptavistBridge.request({
+    url: "/rest/api/2/myself",
+    type: "GET"
+  });
+  
+  // Now read context (after bridge is ready)
+  const issueKey = AdaptavistBridgeContext?.context?.issueKey;
+  
+  console.log("ScriptRunner issueKey:", issueKey);
+
 
   // Then wait for your DOM to exist
   const panelPlan = document.getElementById("actions-plan");
