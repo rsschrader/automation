@@ -25,6 +25,25 @@ async function waitForIssueKey({ timeoutMs = 8000, pollMs = 150 } = {}) {
   }
   return null; // timed out
 }
+let __cachedIssueKey = null;
+
+async function resolveIssueKeyWithRetry() {
+  if (__cachedIssueKey) return __cachedIssueKey;
+
+  for (let i = 0; i < 20; i++) {
+    const key = getIssueKeySafe();
+    if (key) {
+      __cachedIssueKey = key;
+      console.log("ScriptRunner issueKey:", key);
+      return key;
+    }
+    await sleep(150);
+  }
+
+  console.error("ScriptRunner: Unable to resolve issueKey");
+  return null;
+}
+
 
 let __srInitialized = false;
 
@@ -38,12 +57,9 @@ async function attachScriptRunnerButtonListener() {
   //  console.error("ScriptRunner: issueKey not available (timed out). Are you on an Issue view?");
   //  return;
   //}
-  const issueKey = getIssueKeySafe();
-  
-  if (!issueKey) {
-    console.error("ScriptRunner: Unable to resolve issueKey");
-    return;
-  }
+  const issueKey = await resolveIssueKeyWithRetry();
+  if (!issueKey) return;
+
   
   console.log("ScriptRunner issueKey:", issueKey);
 
