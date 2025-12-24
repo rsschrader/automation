@@ -4,6 +4,13 @@
 
 // ---- helpers (top-level) ----
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+function getIssueKeySafe() {
+  const ctxKey = AdaptavistBridgeContext?.context?.issueKey;
+  if (ctxKey) return ctxKey;
+  const match = window.location.href.match(/\/browse\/([A-Z]+-\d+)/) ||
+    window.location.href.match(/[?&]issueKey=([A-Z]+-\d+)/);
+  return match ? match[1] : null;
+}
 
 async function waitForIssueKey({ timeoutMs = 8000, pollMs = 150 } = {}) {
   const start = Date.now();
@@ -27,15 +34,11 @@ async function attachScriptRunnerButtonListener() {
   //  console.error("ScriptRunner: issueKey not available (timed out). Are you on an Issue view?");
   //  return;
   //}
-  // Force Adaptavist bridge initialization
-  await AdaptavistBridge.request({
-    url: "/rest/api/2/myself",
-    type: "GET"
-  });
-  
-  // Now read context (after bridge is ready)
-  const issueKey = AdaptavistBridgeContext?.context?.issueKey;
-  
+  const issueKey = getIssueKeySafe();
+  if (!issueKey) {
+    console.error("Unable to resolve issue key");
+    return;
+  }  
   console.log("ScriptRunner issueKey:", issueKey);
 
 
