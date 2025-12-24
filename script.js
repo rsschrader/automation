@@ -5,11 +5,15 @@
 // ---- helpers (top-level) ----
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 function getIssueKeySafe() {
-  const ctxKey = AdaptavistBridgeContext?.context?.issueKey;
-  if (ctxKey) return ctxKey;
-  const match = window.location.href.match(/\/browse\/([A-Z]+-\d+)/) ||
-    window.location.href.match(/[?&]issueKey=([A-Z]+-\d+)/);
-  return match ? match[1] : null;
+  // URL path: /browse/QA-62751
+  const pathMatch = window.location.pathname.match(/\/browse\/([A-Z]+-\d+)/);
+  if (pathMatch) return pathMatch[1];
+
+  // URL query: ?issueKey=QA-62751
+  const queryMatch = window.location.search.match(/[?&]issueKey=([A-Z]+-\d+)/);
+  if (queryMatch) return queryMatch[1];
+
+  return null;
 }
 
 async function waitForIssueKey({ timeoutMs = 8000, pollMs = 150 } = {}) {
@@ -35,12 +39,13 @@ async function attachScriptRunnerButtonListener() {
   //  return;
   //}
   const issueKey = getIssueKeySafe();
+  
   if (!issueKey) {
-    console.error("Unable to resolve issue key");
+    console.error("ScriptRunner: Unable to resolve issueKey");
     return;
-  }  
+  }
+  
   console.log("ScriptRunner issueKey:", issueKey);
-
 
   // Then wait for your DOM to exist
   const panelPlan = document.getElementById("actions-plan");
@@ -109,7 +114,7 @@ async function attachScriptRunnerButtonListener() {
 
   // --- ping service ---
   try {
-    const pingUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/ping?SourceInfo=${toQueryParam(sourceInfo)}`;
+    const pingUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/ping?SourceInfo=${toQueryParam(sourceInfo)}`;
     const pingResp = await fetchWithTimeout(pingUrl, 5000);
     if (!pingResp.ok) throw new Error(`HTTP ${pingResp.status}`);
     await pingResp.json().catch(() => null);
