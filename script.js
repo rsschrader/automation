@@ -57,10 +57,9 @@ async function attachScriptRunnerButtonListener() {
   //  console.error("ScriptRunner: issueKey not available (timed out). Are you on an Issue view?");
   //  return;
   //}
-  const issueKey = await resolveIssueKeyWithRetry();
-  if (!issueKey) return;
-
-  
+  const issueKey = __cachedIssueKey || await resolveIssueKeyWithRetry();
+  if (!issueKey) return;  
+  alert("ScriptRunner loaded. IssueKey = " + issueKey);
   console.log("ScriptRunner issueKey:", issueKey);
 
   // Then wait for your DOM to exist
