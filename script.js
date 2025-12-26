@@ -7,7 +7,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 function getIssueKeySafe() {
   // URL path: /browse/QA-62751
   //const pathMatch = window.location.pathname.match(/\/browse\/([A-Z]+-\d+)/);
-  window.location.pathname.match(/([A-Z]+-\d+)/);
+  const pathMatch = window.location.pathname.match(/([A-Z]+-\d+)/);
   if (pathMatch) return pathMatch[0];
 
   // URL query: ?issueKey=QA-62751
