@@ -130,7 +130,7 @@ async function attachScriptRunnerButtonListener() {
 
   // --- ping service ---
   try {
-    const pingUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/ping?SourceInfo=${toQueryParam(sourceInfo)}`;
+    const pingUrl = `http://localhost/api/v1/jira/ping?SourceInfo=${toQueryParam(sourceInfo)}`;
     const pingResp = await fetchWithTimeout(pingUrl, 5000);
     if (!pingResp.ok) throw new Error(`HTTP ${pingResp.status}`);
     await pingResp.json().catch(() => null);
