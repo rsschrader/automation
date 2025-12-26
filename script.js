@@ -80,7 +80,7 @@ async function attachScriptRunnerButtonListener() {
     !messageBox
   ) {
     // DOM not ready yet (or fragment not rendered yet) -> retry
-    setTimeout(attachScriptRunnerButtonListener, 200);
+    //setTimeout(attachScriptRunnerButtonListener, 200);
     return;
   }
 
