@@ -62,6 +62,18 @@ async function attachScriptRunnerButtonListener() {
   if (!issueKey) return;  
   alert("ScriptRunner loaded. IssueKey = " + issueKey);
   console.log("ScriptRunner issueKey:", issueKey);
+  fetch("https://localhost/api/v1/ping")
+    .then((r) => {
+      console.log("Localhost ping status:", r.status);
+      return r.text();
+    })
+    .then((t) => {
+      console.log("Localhost ping response:", t);
+    })
+    .catch((e) => {
+      console.error("Localhost ping failed:", e.message);
+    });
+
 
   // Then wait for your DOM to exist
   const panelPlan = document.getElementById("actions-plan");
