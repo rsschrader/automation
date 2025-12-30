@@ -74,6 +74,32 @@ async function attachScriptRunnerButtonListener() {
       console.error("Localhost ping failed:", e.message);
     });
 
+  // 2) Public CORS-enabled API (expected to WORK)
+  fetch("https://api.github.com")
+    .then((r) => {
+      console.log("GitHub status:", r.status);
+      return r.json();
+    })
+    .then((j) => {
+      console.log("GitHub OK, keys:", Object.keys(j));
+    })
+    .catch((e) => {
+      console.error("GitHub fetch failed:", e.message);
+    });
+
+  // 3) Public site without CORS headers (expected to FAIL)
+  fetch("https://www.wikipedia.org")
+    .then((r) => {
+      console.log("Wikipedia status:", r.status);
+      return r.text();
+    })
+    .then((t) => {
+      console.log("Wikipedia response length:", t.length);
+    })
+    .catch((e) => {
+      console.error("Wikipedia fetch failed:", e.message);
+    });
+
 
   // Then wait for your DOM to exist
   const panelPlan = document.getElementById("actions-plan");
