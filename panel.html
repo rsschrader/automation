@@ -1,9 +1,17 @@
-<div id="actions-plan" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-  <button id="run-test-plan-status" style="display:none">Run Status</button>
-  <button id="run-test-plan-button" style="display:none">Run TestPlan TestExecutions</button>
+<div class="scroll-wrapper">
+  <!-- Header -->
+  <div class="status-box header">
+    <button id="run-status-button">Run Status</button>
+    <button id="run-dynamic-button">Loading...</button>
+  </div>
+
+  <!-- Progress bar -->
+  <div id="progress-container" class="hidden">
+    <div id="progress-bar">0%</div>
+  </div>
+
+  <!-- Message boxes -->
+  <div id="status-box-1" class="status-box messages scrollable hidden"></div>
+  <div id="status-box-2" class="status-box messages scrollable hidden"></div>
+  <div id="status-box-3" class="status-box messages scrollable hidden"></div>
 </div>
-<div id="actions-execution" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-  <button id="run-test-execution-status" style="display:none">Run Status</button>
-  <button id="run-test-execution-button" style="display:none">Run TestExecution XrayTests</button>
-</div>
-<div id="script-response-message" aria-live="polite"></div>
