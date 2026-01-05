@@ -1,32 +1,73 @@
-  :root {
-    --ds-font-family-heading: "Atlassian Sans", ui-sans-serif, -apple-system,
-      BlinkMacSystemFont, "Segoe UI", Ubuntu, "Helvetica Neue", sans-serif;
-  }
-  html, body { font-family: var(--ds-font-family-heading); }
+.scroll-wrapper {
+  background: white;
+  padding: 0;
+}
 
-  #run-test-plan-status,
-  #run-test-plan-button,
-  #run-test-execution-status,
-  #run-test-execution-button {
-    background-color: #0045ac;
-    color: white;
-    padding: 6px 12px;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    font-size: 15px;
-    font-family: inherit;
-    margin: 0px 8px 0px -7px;
-  }
-  #run-test-plan-status:hover,
-  #run-test-plan-button:hover,
-  #run-test-execution-status:hover,
-  #run-test-execution-button:hover {
-    background-color: #0052cc;
-  }
-  #script-response-message {
-    margin-top: 10px;
-    font-size: 14px;
-    color: black;
-  }
-  button, input, select, textarea { font: inherit; }
+/* Sticky header */
+.status-box.header {
+  background-color: #fff4d2;
+  padding: 10px;
+  font-weight: bold;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  gap: 8px;
+}
+
+/* Message boxes */
+.status-box.messages {
+  background-color: #fff4d2;
+  padding: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-top: 6px;
+  font-family: Consolas, Monaco, monospace;
+  color: #222;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.scrollable {
+  max-height: 150px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+/* Buttons */
+button {
+  padding: 6px 12px;
+  background: #0052cc;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #0747a6;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Progress bar */
+#progress-container {
+  width: 100%;
+  background: #eee;
+  height: 20px;
+  border-radius: 4px;
+  margin: 8px 0;
+}
+
+#progress-bar {
+  height: 20px;
+  line-height: 20px;
+  font-size: 14px;
+  text-align: center;
+  color: #fff;
+  background: #007bff;
+  border-radius: 4px;
+  width: 0%;
+}
