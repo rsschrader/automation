@@ -35,7 +35,7 @@ async function attachScriptRunnerButtonListener() {
     async function pingAutomationService() {
         messageBox1.classList.remove("hidden");
         messageBox1.innerText = "Connecting to Test Automation Service...";
-
+        
         try {
             const resp = await fetchWithTimeout(
                 "https://dcmcobwasqld01.ad.mvwcorp.com:8443/api/v1/ping",
@@ -79,8 +79,8 @@ async function attachScriptRunnerButtonListener() {
     }
 
     // Initial ping (ONLY ONCE)
-    const pingOk = await pingAutomationService();
-    if (!pingOk) return;
+    //const pingOk = await pingAutomationService();
+    //if (!pingOk) return;
 
     runButton.disabled = true;
 
