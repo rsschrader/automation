@@ -13,22 +13,25 @@ async function attachScriptRunnerButtonListener() {
     const progressContainer = document.getElementById("progress-container");
     const progressBar = document.getElementById("progress-bar");
     const ContextissueKey = window.AdaptavistBridgeContext?.context?.issueKey;
+    let sourceInfo = "";
     
     // ScriptRunner can re-render → wait for DOM
     if (!statusButton || !runButton || !messageBox1 || !messageBox2 || !messageBox3 || !progressContainer || !progressBar) {
         setTimeout(attachScriptRunnerButtonListener, 200);
         return;
     }
-    let issueKey = getIssueKeyFromUrl(); 
-    if (!issueKey) {
-        console.warn("IssueKey not resolved yet, continuing with placeholder");
-        return;
-    }   
-    console.log("Resolved IssueKey:", issueKey);
+    let issueKey = getIssueKeyFromUrl();
+    ///*TO DELETE*/if (!["QA-62750", "QA-62632", "QA-62751", "QA-45036", "QA-62914", "QA-62623", "QA-62624"].includes(issueKey)) { return; }
+    
     const issueType = "TestExecution";
     // const issueType = "TestPlan";
 
     runButton.disabled = true;
+    messageBox1.classList.remove("hidden");
+    messageBox1.innerText = "Test Automation Service Connecting ...";
+    //hideRow(panelPlan, [statusPlan, buttonPlan]);
+    //hideRow(panelExecution, [statusExecution, buttonExecution]);
+
 
     function setProgress(pct) {
         progressContainer.classList.remove("hidden");
@@ -36,42 +39,49 @@ async function attachScriptRunnerButtonListener() {
         progressBar.innerText = pct + "%";
     }
 
-    function fetchWithTimeout(url, timeout = 5000) {
+    function fetchWithTimeout(url, timeout) {
         const controller = new AbortController();
         const tid = setTimeout(() => controller.abort(), timeout);
         return fetch(url, { method: "GET", signal: controller.signal })
             .finally(() => clearTimeout(tid));
     }
-
-    async function pingAutomationService() {
-        messageBox1.classList.remove("hidden");
-        messageBox1.innerText = "Connecting to Test Automation Service...";
-        
-        try {
-            const resp = await fetchWithTimeout(
-                "https://dcmcobwasqld01.ad.mvwcorp.com:8443/api/v1/ping",
-                5000
-            );
-
-            if (!resp.ok) {
-                throw new Error(`HTTP ${resp.status}`);
-            }
-
-            const text = await resp.text();
-            messageBox1.innerText =
-                "Test Automation Service is Online\n" +
-                `Ping Response: ${text}`;
-
-            return true;
-        } catch (error) {
-            console.error("Ping failed:", error);
-            messageBox1.innerText =
-                error.name === "AbortError" || error.message === "Failed to fetch"
-                    ? "Test Automation is accessible only from the corporate network (VPN required)"
-                    : "Test Automation Service is Offline. Please contact SVT Admin group";
-            return false;
-        }
+    try {
+        const ipResponce = await fetchWithTimeout("https://api.ipify.org?format=json", 5000);
+        if (!ipResponce.ok) throw new Error(`IP API failed: ${ipResponce.status}`);
+        const ipData = await ipResponce.json();
+        const sourceIp = ipData?.ip;
+        if (!sourceIp) throw new Error("No IP address returned");
+    
+        const orgResponce = await fetchWithTimeout(`https://ipinfo.io/${sourceIp}/org`, 5000);
+        if (!orgResponce.ok) throw new Error(`Org API failed: ${orgResponce.status}`);
+        const sourceOrg = await orgResponce.text();
+    
+        sourceInfo = `IP: ${sourceIp} - Org: ${sourceOrg}`;
+    } catch (error) {
+        console.error("Error fetching IP or Org:", error);
+        sourceInfo = `IP: ***.***.***.*** - Org: Not Available`;
     }
+    try {
+        const pingResp = await fetchWithTimeout(
+            `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/ping?SourceInfo=${sourceInfo}`,
+            5000
+        );
+    
+        if (!pingResp.ok) throw new Error(`HTTP ${pingResp.status}`);
+        const pingData = await pingResp.json();
+    } catch (error) {
+        console.error("Caught error during initial /ping:", error);
+    
+        await sleep(2000);
+        messageBox.innerText =
+            error.message === "Failed to fetch"
+                ? "Test Automation is accessible only from the corporate network. (on-site or via VPN)"
+                : "Test Automation Service is Offline: Please contact SVT Admin group";
+    
+        return;
+    }
+
+
 
     switch (issueType) {
         case "TestPlan":
@@ -103,8 +113,7 @@ async function attachScriptRunnerButtonListener() {
         messageBox2.classList.remove("hidden");
         messageBox3.classList.remove("hidden");
 
-        messageBox1.innerText =`Init: IssueKey = ${issueKey} IssueType = ${issueType} Test Automation Service is Online`;
-        messageBox1.innerText =`ContextIssueKey = ${ContextissueKey}`;
+        messageBox1.innerText =`Init: IssueKey = ${issueKey} IssueType = ${issueType}\n` + `ContextIssueKey = ${ContextissueKey}`;
         messageBox2.innerText = "";
         messageBox3.innerText = "";
         
