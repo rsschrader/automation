@@ -114,7 +114,7 @@ async function attachScriptRunnerButtonListener() {
         messageBox3.classList.remove("hidden");
 
         messageBox1.innerText =`Init: IssueKey = ${issueKey} IssueType = ${issueType} Test Automation Service is Online`;
-        messageBox1.innerText =\nContextIssueKey: ${issueKey}`;
+        messageBox1.innerText =`ContextIssueKey = ${ContextissueKey}`;
         messageBox2.innerText = "";
         messageBox3.innerText = "";
         
