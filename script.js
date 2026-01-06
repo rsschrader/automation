@@ -73,7 +73,8 @@ async function attachScriptRunnerButtonListener() {
         console.error("Caught error during initial /ping:", error);
     
         await sleep(2000);
-        messageBox.innerText =
+        messageBox1.classList.remove("hidden");
+        messageBox1.innerText =
             error.message === "Failed to fetch"
                 ? "Test Automation is accessible only from the corporate network. (on-site or via VPN)"
                 : "Test Automation Service is Offline: Please contact SVT Admin group";
