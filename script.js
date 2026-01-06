@@ -70,7 +70,7 @@ async function attachScriptRunnerButtonListener() {
         if (!pingResp.ok) throw new Error(`HTTP ${pingResp.status}`);
         const pingData = await pingResp.json();
     } catch (error) {
-        console.error("Caught error during initial /ping:", error);
+        console.error("SR: Caught error during initial /ping:", error);
     
         await sleep(2000);
         messageBox1.classList.remove("hidden");
