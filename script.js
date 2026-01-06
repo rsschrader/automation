@@ -9,11 +9,6 @@ async function attachScriptRunnerButtonListener() {
 
     const issueKey = window.AdaptavistBridgeContext?.context?.issueKey;
 
-    if (!statusButton || !runButton || !messageBox1 || !messageBox2 || !messageBox3 || !issueKey) {
-        setTimeout(attachScriptRunnerButtonListener, 200);
-        return;
-    }
-
     console.log("UI ready. IssueKey:", issueKey);
 
     // --- Button: STATUS ---
