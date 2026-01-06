@@ -19,21 +19,12 @@ async function attachScriptRunnerButtonListener() {
         setTimeout(attachScriptRunnerButtonListener, 200);
         return;
     }
-    let issueKey = getIssueKeyFromUrl();  
+    let issueKey = getIssueKeyFromUrl(); 
     if (!issueKey) {
-        for (let i = 0; i < 5; i++) {
-            await sleep(150);
-            issueKey = getIssueKeyFromUrl();
-            if (issueKey) break;
-        }
-    }    
-    if (!issueKey) {
-    console.warn("IssueKey not resolved yet, continuing with placeholder");
-    issueKey = "QA-62751";
-    }
-   
+        console.warn("IssueKey not resolved yet, continuing with placeholder");
+        return;
+    }   
     console.log("Resolved IssueKey:", issueKey);
-
     const issueType = "TestExecution";
     // const issueType = "TestPlan";
 
