@@ -1,79 +1,101 @@
 .scroll-wrapper {
   background: white;
   padding: 0;
+  overflow: visible;        /* IMPORTANT: no panel scroll */
+  max-height: none;
 }
-
-/* Sticky header */
 .status-box.header {
   background-color: #fff4d2;
-  padding: 10px;
+  padding: 8px 10px;
   font-weight: bold;
   position: sticky;
   top: 0;
   z-index: 10;
+
   display: flex;
   gap: 8px;
+  align-items: center;
 }
-
-/* Message boxes */
-.status-box.messages {
-  background-color: #fff4d2;
-  padding: 12px;
-  font-size: 14px;
-  line-height: 1.5;
-  margin-top: 6px;
-  font-family: Consolas, Monaco, monospace;
-  color: #222;
-  border-radius: 4px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-}
-
-.scrollable {
-  max-height: 150px;
-  overflow-y: auto;
-  white-space: pre-wrap;
-}
-
-/* Buttons */
 button {
-  padding: 6px 12px;
+  padding: 5px 12px;
   background: #0052cc;
   color: white;
   border: none;
   border-radius: 3px;
   cursor: pointer;
+  font-size: 13px;
 }
 
 button:hover {
   background: #0747a6;
 }
 
-.hidden {
-  display: none !important;
-}
 button:disabled {
   background: #a5adba;
   cursor: not-allowed;
-  opacity: 0.7;
+  opacity: 0.75;
+}
+.status-box.messages {
+  background-color: #fff4d2;
+  padding: 10px 12px;
+  font-size: 13px;
+  line-height: 1.45;
+  margin-top: 6px;
+
+  font-family: Consolas, Monaco, monospace;
+  color: #222;
+
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
+/* Only message boxes scroll */
+.scrollable {
+  max-height: 140px;        /* ~10–12 lines */
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+/* Chrome / Edge */
+.scrollable::-webkit-scrollbar {
+  width: 5px;
+}
 
-/* Progress bar */
+.scrollable::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+  background: #c1c7d0;      /* Atlassian gray */
+  border-radius: 3px;
+}
+
+.scrollable::-webkit-scrollbar-thumb:hover {
+  background: #a5adba;
+}
+
+/* Firefox */
+.scrollable {
+  scrollbar-width: thin;
+  scrollbar-color: #c1c7d0 transparent;
+}
 #progress-container {
   width: 100%;
   background: #eee;
-  height: 20px;
+  height: 10px;             /* thinner bar */
   border-radius: 4px;
-  margin: 8px 0;
+  margin: 6px 0;
 }
 
 #progress-bar {
-  height: 20px;
-  line-height: 20px;
-  font-size: 14px;
+  height: 10px;
+  line-height: 10px;
+  font-size: 10px;
   text-align: center;
-  color: #fff;
-  background: #007bff;
+  color: white;
+  background: #0052cc;
   border-radius: 4px;
   width: 0%;
+}
+.hidden {
+  display: none !important;
 }
