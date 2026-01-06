@@ -1,3 +1,9 @@
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+function getIssueKeyFromUrl() {
+    const match = window.location.pathname.match(/([A-Z]+-\d+)/);
+    return match ? match[1] : null;
+}
+
 async function attachScriptRunnerButtonListener() {
     const statusButton = document.getElementById("run-status-button");
     const runButton    = document.getElementById("run-dynamic-button");
@@ -6,14 +12,29 @@ async function attachScriptRunnerButtonListener() {
     const messageBox3  = document.getElementById("status-box-3");
     const progressContainer = document.getElementById("progress-container");
     const progressBar = document.getElementById("progress-bar");
-
+    const ContextissueKey = window.AdaptavistBridgeContext?.context?.issueKey;
+    
     // ScriptRunner can re-render → wait for DOM
     if (!statusButton || !runButton || !messageBox1 || !messageBox2 || !messageBox3 || !progressContainer || !progressBar) {
         setTimeout(attachScriptRunnerButtonListener, 200);
         return;
     }
+    let issueKey = getIssueKeyFromUrl();  
+    if (!issueKey) {
+        for (let i = 0; i < 5; i++) {
+            await sleep(150);
+            issueKey = getIssueKeyFromUrl();
+            if (issueKey) break;
+        }
+    }    
+    if (!issueKey) {
+        messageBox1.classList.remove("hidden");
+        messageBox1.innerText = "Unable to determine Issue Key.";
+        console.error("ScriptRunner: IssueKey not found");
+        return;
+    }    
+    console.log("Resolved IssueKey:", issueKey);
 
-    const issueKey = "QA-62751";
     const issueType = "TestExecution";
     // const issueType = "TestPlan";
 
@@ -92,11 +113,11 @@ async function attachScriptRunnerButtonListener() {
         messageBox2.classList.remove("hidden");
         messageBox3.classList.remove("hidden");
 
-        messageBox1.innerText =
-            `Init: IssueKey = ${issueKey} IssueType = ${issueType} Test Automation Service is Online`;
+        messageBox1.innerText =`Init: IssueKey = ${issueKey} IssueType = ${issueType} Test Automation Service is Online`;
+        messageBox1.innerText =\nContextIssueKey: ${issueKey}`;
         messageBox2.innerText = "";
         messageBox3.innerText = "";
-
+        
         const fakeItems =
             issueType === "TestPlan"
                 ? [
@@ -121,7 +142,6 @@ async function attachScriptRunnerButtonListener() {
             pct += 20;
             if (pct > 100) pct = 100;
             setProgress(pct);
-
             if (index < fakeItems.length) {
                 const item = fakeItems[index];
                 if (issueType === "TestPlan") {
@@ -134,15 +154,12 @@ async function attachScriptRunnerButtonListener() {
                 messageBox2.scrollTop = messageBox2.scrollHeight;
                 index++;
             }
-
             if (pct === 100) {
                 clearInterval(interval);
                 messageBox2.innerText += "All finished!\n";
-                messageBox3.innerText =
-                    `Final Fake Response: ${JSON.stringify(fakeItems, null, 2)}`;
+                messageBox3.innerText = `Final Response: ${JSON.stringify(fakeItems, null, 2)}`;
                 runButton.disabled = false;
-            }
-        }, 700);
+            }}, 700);
     });
 
     runButton.addEventListener("click", () => {
