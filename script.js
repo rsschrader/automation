@@ -38,7 +38,7 @@ async function attachScriptRunnerButtonListener() {
 
         try {
             const resp = await fetchWithTimeout(
-                "https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/ping",
+                "https://dcmcobwasqld01.ad.mvwcorp.com:8443/api/v1/ping",
                 5000
             );
 
