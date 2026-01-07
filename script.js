@@ -10,11 +10,10 @@ async function attachScriptRunnerButtonListener() {
   const box3 = document.getElementById("status-box-3");
   const progressContainer = document.getElementById("progress-container");
   const progressBar = document.getElementById("progress-bar");
-  const issueKey = "QA-62751";
+  const issueKey = getIssueKeyFromUrl();
   const issueType = "TestExecution";  
   //const issueType = "TestPlan"; 
-  let issueKey1 = getIssueKeyFromUrl();
-
+    
   //temporary replacement for switch(issuetype) 
   statusButton.innerText = "Run Status";
   runButton.innerText = issueType === "TestPlan" ? "Run TestPlan TestExecutions" : "Run TestExecution XrayTests";
