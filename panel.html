@@ -1,17 +1,19 @@
-<div class="scroll-wrapper">
-  <!-- Header -->
-  <div class="status-box header">
+<div class="script-root">
+  <!-- Sticky header -->
+  <div class="status-box header sticky-top">
     <button id="run-status-button">Run Status</button>
     <button id="run-dynamic-button" disabled>Loading...</button>
   </div>
 
-  <!-- Progress bar -->
-  <div id="progress-container" class="hidden">
+  <!-- Sticky progress bar -->
+  <div id="progress-container" class="sticky-progress hidden">
     <div id="progress-bar">0%</div>
   </div>
 
-  <!-- Message boxes -->
-  <div id="status-box-1" class="status-box messages scrollable hidden"></div>
-  <div id="status-box-2" class="status-box messages scrollable hidden"></div>
-  <div id="status-box-3" class="status-box messages scrollable hidden"></div>
+  <!-- SCROLL AREA -->
+  <div class="messages-scroll">
+    <div id="status-box-1" class="status-box messages hidden"></div>
+    <div id="status-box-2" class="status-box messages hidden"></div>
+    <div id="status-box-3" class="status-box messages hidden"></div>
+  </div>
 </div>
