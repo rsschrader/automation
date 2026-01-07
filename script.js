@@ -45,7 +45,7 @@ async function attachScriptRunnerButtonListener() {
         return fetch(url, { method: "GET", signal: controller.signal })
             .finally(() => clearTimeout(tid));
     }
-    try {
+   try {
         const ipResponce = await fetchWithTimeout("https://api.ipify.org?format=json", 5000);
         if (!ipResponce.ok) throw new Error(`IP API failed: ${ipResponce.status}`);
         const ipData = await ipResponce.json();
@@ -61,7 +61,7 @@ async function attachScriptRunnerButtonListener() {
         console.error("Error fetching IP or Org:", error);
         sourceInfo = `IP: ***.***.***.*** - Org: Not Available`;
     }
-   try {
+   /*try {
         const pingResp = await fetchWithTimeout(
             `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/ping?SourceInfo=${sourceInfo}`,
             5000
@@ -81,7 +81,7 @@ async function attachScriptRunnerButtonListener() {
     
         return;
     }
-
+*/
 
     switch (issueType) {
         case "TestPlan":
