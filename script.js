@@ -1,176 +1,82 @@
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 function getIssueKeyFromUrl() {
     const match = window.location.pathname.match(/([A-Z]+-\d+)/);
     return match ? match[1] : null;
 }
-
 async function attachScriptRunnerButtonListener() {
-    const statusButton = document.getElementById("run-status-button");
-    const runButton    = document.getElementById("run-dynamic-button");
-    const messageBox1  = document.getElementById("status-box-1");
-    const messageBox2  = document.getElementById("status-box-2");
-    const messageBox3  = document.getElementById("status-box-3");
-    const progressContainer = document.getElementById("progress-container");
-    const progressBar = document.getElementById("progress-bar");
-    const ContextissueKey = window.AdaptavistBridgeContext?.context?.issueKey;
-    let sourceInfo = "";
-    
-    // ScriptRunner can re-render → wait for DOM
-    if (!statusButton || !runButton || !messageBox1 || !messageBox2 || !messageBox3 || !progressContainer || !progressBar) {
-        setTimeout(attachScriptRunnerButtonListener, 200);
-        return;
-    }
-    let issueKey = getIssueKeyFromUrl();
-    ///*TO DELETE*/if (!["QA-62750", "QA-62632", "QA-62751", "QA-45036", "QA-62914", "QA-62623", "QA-62624"].includes(issueKey)) { return; }
-    
-    const issueType = "TestExecution";
-    // const issueType = "TestPlan";
+  const statusButton = document.getElementById("run-status-button");
+  const runButton    = document.getElementById("run-dynamic-button");
+  const box1 = document.getElementById("status-box-1");
+  const box2 = document.getElementById("status-box-2");
+  const box3 = document.getElementById("status-box-3");
+  const progressContainer = document.getElementById("progress-container");
+  const progressBar = document.getElementById("progress-bar");
+  const issueKey = "QA-62751";
+  const issueType = "TestExecution";  
+  //const issueType = "TestPlan"; 
+  let issueKey1 = getIssueKeyFromUrl();
 
+  //temporary replacement for switch(issuetype) 
+  statusButton.innerText = "Run Status";
+  runButton.innerText = issueType === "TestPlan" ? "Run TestPlan TestExecutions" : "Run TestExecution XrayTests";
+
+  box1.classList.remove("hidden");
+  box1.innerText = "Test Automation Service is Online";
+
+  statusButton.addEventListener("click", () => {
     runButton.disabled = true;
-    messageBox1.classList.remove("hidden");
-    messageBox1.innerText = "Test Automation Service Connecting ...";
-    //hideRow(panelPlan, [statusPlan, buttonPlan]);
-    //hideRow(panelExecution, [statusExecution, buttonExecution]);
+    setProgress(0);
+    box1.classList.remove("hidden");
+    box2.classList.remove("hidden");
+    box3.classList.remove("hidden");
+    box1.innerText = `Init: IssueKey = ${issueKey} IssueType = ${issueType}`;
+    box2.innerText = "";
+    box3.innerText = "";
+    const items = issueType === "TestPlan"
+      ? [
+          { execution: "QA-4", tests: 2 },
+          { execution: "QA-16", tests: 2 },
+          { execution: "QA-17", tests: 2 }
+        ]
+      : [
+          { test: "QA-101", summary: "Login Test" },
+          { test: "QA-102", summary: "Search Test" },
+          { test: "QA-103", summary: "Booking Flow Test" }
+        ];
 
+    let pct = 0;
+    let idx = 0;
 
-    function setProgress(pct) {
-        progressContainer.classList.remove("hidden");
-        progressBar.style.width = pct + "%";
-        progressBar.innerText = pct + "%";
-    }
+    const interval = setInterval(() => {
+      pct += 20;
+      if (pct > 100) pct = 100;
+      setProgress(pct);
 
-    function fetchWithTimeout(url, timeout) {
-        const controller = new AbortController();
-        const tid = setTimeout(() => controller.abort(), timeout);
-        return fetch(url, { method: "GET", signal: controller.signal })
-            .finally(() => clearTimeout(tid));
-    }
-   try {
-        const ipResponce = await fetchWithTimeout("https://api.ipify.org?format=json", 5000);
-        if (!ipResponce.ok) throw new Error(`IP API failed: ${ipResponce.status}`);
-        const ipData = await ipResponce.json();
-        const sourceIp = ipData?.ip;
-        if (!sourceIp) throw new Error("No IP address returned");
+      if (idx < items.length) {
+        const item = items[idx++];
+        box2.innerText += issueType === "TestPlan" ? `Execution ${idx}: ${item.execution} running ${item.tests} tests...\n` : `Test ${idx}: ${item.test} - ${item.summary} running...\n`;
+        box2.scrollTop = box2.scrollHeight;
+      }
+
+      if (pct === 100) {
+        clearInterval(interval);
+        box2.innerText += "All finished!\n";
+        box3.innerText = `Final Fake Response:\n${JSON.stringify(items, null, 2)}`;
+        runButton.disabled = false;
+      }
+    }, 700);
+  });
+
+  runButton.addEventListener("click", () => {
+    box1.innerText = `Run button clicked IssueKey = ${issueKey}`;
+    box2.innerText = "Ready to wire real /run logic";
+    box3.innerText = "Placeholder response";
+  });
     
-        const orgResponce = await fetchWithTimeout(`https://ipinfo.io/${sourceIp}/org`, 5000);
-        if (!orgResponce.ok) throw new Error(`Org API failed: ${orgResponce.status}`);
-        const sourceOrg = await orgResponce.text();
-    
-        sourceInfo = `IP: ${sourceIp} - Org: ${sourceOrg}`;
-    } catch (error) {
-        console.error("Error fetching IP or Org:", error);
-        sourceInfo = `IP: ***.***.***.*** - Org: Not Available`;
-    }
-   /*try {
-        const pingResp = await fetchWithTimeout(
-            `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/ping?SourceInfo=${sourceInfo}`,
-            5000
-        );
-    
-        if (!pingResp.ok) throw new Error(`HTTP ${pingResp.status}`);
-        const pingData = await pingResp.json();
-    } catch (error) {
-        console.error("SR: Caught error during initial /ping:", error);
-    
-        await sleep(2000);
-        messageBox1.classList.remove("hidden");
-        messageBox1.innerText =
-            error.message === "Failed to fetch"
-                ? "Test Automation is accessible only from the corporate network. (on-site or via VPN)"
-                : "Test Automation Service is Offline: Please contact SVT Admin group";
-    
-        return;
-    }
-*/
-
-    switch (issueType) {
-        case "TestPlan":
-            statusButton.innerText = "Run Status";
-            runButton.innerText = "Run TestPlan TestExecutions";
-            break;
-        case "TestExecution":
-            statusButton.innerText = "Run Status";
-            runButton.innerText = "Run TestExecution XrayTests";
-            break;
-        default:
-            messageBox1.classList.remove("hidden");
-            messageBox1.innerText =
-                "Test Automation is accessible only from TestPlans or TestExecutions";
-            return;
-    }
-
-    // Initial ping (ONLY ONCE)
-    //const pingOk = await pingAutomationService();
-    //if (!pingOk) return;
-
-    runButton.disabled = true;
-
-    statusButton.addEventListener("click", () => {
-        runButton.disabled = true;
-        setProgress(0);
-
-        messageBox1.classList.remove("hidden");
-        messageBox2.classList.remove("hidden");
-        messageBox3.classList.remove("hidden");
-
-        messageBox1.innerText =`Init: IssueKey = ${issueKey} IssueType = ${issueType}\n` + `ContextIssueKey = ${ContextissueKey}`;
-        messageBox2.innerText = "";
-        messageBox3.innerText = "";
-        
-        const fakeItems =
-            issueType === "TestPlan"
-                ? [
-                    { execution: "QA-4", tests: 2 },
-                    { execution: "QA-16", tests: 2 },
-                    { execution: "QA-17", tests: 2 },
-                    { execution: "QA-18", tests: 2 },
-                    { execution: "QA-19", tests: 3 }
-                  ]
-                : [
-                    { test: "QA-101", summary: "Login Test" },
-                    { test: "QA-102", summary: "Search Test" },
-                    { test: "QA-103", summary: "Booking Flow Test" },
-                    { test: "QA-104", summary: "Payment Test" },
-                    { test: "QA-105", summary: "Cancellation Test" }
-                  ];
-
-        let pct = 0;
-        let index = 0;
-
-        const interval = setInterval(() => {
-            pct += 20;
-            if (pct > 100) pct = 100;
-            setProgress(pct);
-            if (index < fakeItems.length) {
-                const item = fakeItems[index];
-                if (issueType === "TestPlan") {
-                    messageBox2.innerText +=
-                        `Execution ${index + 1}: ${item.execution} running ${item.tests} tests...\n`;
-                } else {
-                    messageBox2.innerText +=
-                        `Test ${index + 1}: ${item.test} - ${item.summary} running...\n`;
-                }
-                messageBox2.scrollTop = messageBox2.scrollHeight;
-                index++;
-            }
-            if (pct === 100) {
-                clearInterval(interval);
-                messageBox2.innerText += "All finished!\n";
-                messageBox3.innerText = `Final Response: ${JSON.stringify(fakeItems, null, 2)}`;
-                runButton.disabled = false;
-            }}, 700);
-    });
-
-    runButton.addEventListener("click", () => {
-        messageBox1.classList.remove("hidden");
-        messageBox2.classList.remove("hidden");
-        messageBox3.classList.remove("hidden");
-
-        messageBox1.innerText =
-            `Run button clicked IssueKey = ${issueKey} IssueType = ${issueType}`;
-        messageBox2.innerText = "Ready to execute real /run logic next";
-        messageBox3.innerText = "Placeholder – real API call will be wired here";
-    });
+  function setProgress(pct) {
+    progressContainer.classList.remove("hidden");
+    progressBar.style.width = pct + "%";
+    progressBar.innerText = pct + "%";
+  }
 }
 
 document.addEventListener("DOMContentLoaded", attachScriptRunnerButtonListener);
