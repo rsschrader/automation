@@ -1,96 +1,99 @@
-.scroll-wrapper {
-  background: white;
+.script-root {
+  background: #ffffff;
   padding: 0;
-  overflow: visible;
-  max-height: none;
+  margin: 0;
 }
 
-.status-box.header {
-  background-color: #fff4d2;
-  padding: 8px 10px;
-  font-weight: bold;
+.status-box.header.sticky-top {
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 30;
+  background-color: #fff4d2;
+  padding: 8px 10px;
   display: flex;
-  gap: 8px;
   align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid #dfe1e6;
 }
 
-button {
+.status-box.header button {
   padding: 5px 12px;
   background: #0052cc;
   color: white;
   border: none;
   border-radius: 3px;
-  cursor: pointer;
   font-size: 13px;
+  cursor: pointer;
 }
 
-button:hover {
+.status-box.header button:hover {
   background: #0747a6;
 }
 
-button:disabled {
+.status-box.header button:disabled {
   background: #a5adba;
   cursor: not-allowed;
   opacity: 0.75;
 }
 
-.status-box.messages {
-  background-color: #fff4d2;
-  padding: 10px 12px;
-  font-size: 13px;
-  line-height: 1.45;
-  margin-top: 6px;
-  font-family: Consolas, Monaco, monospace;
-  color: #222;
-  border-radius: 4px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-}
-
-.scrollable {
-  max-height: 140px;
-  overflow-y: auto;
-  white-space: pre-wrap;
-  scrollbar-width: thin;
-  scrollbar-color: #c1c7d0 transparent;
-}
-
-.scrollable::-webkit-scrollbar {
-  width: 5px;
-}
-
-.scrollable::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.scrollable::-webkit-scrollbar-thumb {
-  background: #c1c7d0;
-  border-radius: 3px;
-}
-
-.scrollable::-webkit-scrollbar-thumb:hover {
-  background: #a5adba;
-}
-
-#progress-container {
-  width: 100%;
-  background: #eee;
-  height: 16px;
+#progress-container.sticky-progress {
+  position: sticky;
+  top: 44px; /* height of header */
+  z-index: 25;
+  background: #eeeeee;
   border-radius: 6px;
+  height: 16px;
   margin: 6px 0;
+  overflow: hidden;
 }
 
 #progress-bar {
   height: 16px;
   line-height: 16px;
+  background: #0052cc;
+  color: white;
   font-size: 11px;
   text-align: center;
-  color: white;
-  background: #0052cc;
-  border-radius: 6px;
   width: 0%;
+  border-radius: 6px;
+}
+
+.messages-scroll {
+  max-height: 180px;
+  overflow-y: auto;
+  padding-bottom: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: #c1c7d0 transparent;
+}
+
+/* WebKit scrollbar */
+.messages-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+
+.messages-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.messages-scroll::-webkit-scrollbar-thumb {
+  background: #c1c7d0;
+  border-radius: 3px;
+}
+
+.messages-scroll::-webkit-scrollbar-thumb:hover {
+  background: #a5adba;
+}
+
+.status-box.messages {
+  background-color: #fff4d2;
+  padding: 10px 12px;
+  margin-top: 6px;
+  font-family: Consolas, Monaco, monospace;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #222;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
 }
 
 .hidden {
