@@ -61,7 +61,7 @@ async function attachScriptRunnerButtonListener() {
         console.error("Error fetching IP or Org:", error);
         sourceInfo = `IP: ***.***.***.*** - Org: Not Available`;
     }
-    try {
+  /*  try {
         const pingResp = await fetchWithTimeout(
             `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/ping?SourceInfo=${sourceInfo}`,
             5000
@@ -81,7 +81,7 @@ async function attachScriptRunnerButtonListener() {
     
         return;
     }
-
+*/
 
 
     switch (issueType) {
