@@ -1,101 +1,106 @@
+/* Root container */
 .script-root {
-  background: #ffffff;
+  background: white;
   padding: 0;
   margin: 0;
+  overflow: visible;
 }
 
-.status-box.header.sticky-top {
-  position: sticky;
-  top: 0;
-  z-index: 30;
+/* ===== STICKY HEADER ===== */
+.status-box.header {
   background-color: #fff4d2;
   padding: 8px 10px;
+  font-weight: bold;
   display: flex;
-  align-items: center;
   gap: 8px;
-  border-bottom: 1px solid #dfe1e6;
+  align-items: center;
+
+  position: sticky;
+  top: 0;
+  z-index: 20;
 }
 
-.status-box.header button {
+/* ===== STICKY PROGRESS BAR ===== */
+#progress-container {
+  position: sticky;
+  top: 42px; /* height of header */
+  z-index: 19;
+  background: #fff4d2;
+  padding: 6px 8px;
+}
+
+/* Progress bar */
+#progress-bar {
+  height: 14px;
+  line-height: 14px;
+  font-size: 11px;
+  text-align: center;
+  color: white;
+  background: #0052cc;
+  border-radius: 6px;
+  width: 0%;
+}
+
+/* Buttons */
+button {
   padding: 5px 12px;
   background: #0052cc;
   color: white;
   border: none;
   border-radius: 3px;
-  font-size: 13px;
   cursor: pointer;
+  font-size: 13px;
 }
 
-.status-box.header button:hover {
+button:hover {
   background: #0747a6;
 }
 
-.status-box.header button:disabled {
+button:disabled {
   background: #a5adba;
   cursor: not-allowed;
   opacity: 0.75;
 }
 
-#progress-container.sticky-progress {
-  position: sticky;
-  top: 44px; /* height of header */
-  z-index: 25;
-  background: #eeeeee;
-  border-radius: 6px;
-  height: 16px;
-  margin: 6px 0;
-  overflow: hidden;
+/* ===== MESSAGE BOXES (INDIVIDUAL SCROLL) ===== */
+.status-box.messages {
+  background-color: #fff4d2;
+  padding: 8px 10px;
+  font-size: 13px;
+  line-height: 1.45;
+  margin: 6px 8px;
+  font-family: Consolas, Monaco, monospace;
+  color: #222;
+  border-radius: 4px;
+  max-height: 14.5em;     /* ~10–11 lines */
+  overflow-y: auto;       /* scroll ONLY if needed */
+  white-space: pre-wrap;
 }
 
-#progress-bar {
-  height: 16px;
-  line-height: 16px;
-  background: #0052cc;
-  color: white;
-  font-size: 11px;
-  text-align: center;
-  width: 0%;
-  border-radius: 6px;
-}
-
-.messages-scroll {
-  max-height: 180px;
-  overflow-y: auto;
-  padding-bottom: 6px;
-  scrollbar-width: thin;
-  scrollbar-color: #c1c7d0 transparent;
-}
-
-/* WebKit scrollbar */
-.messages-scroll::-webkit-scrollbar {
+/* Thin scrollbar */
+.status-box.messages::-webkit-scrollbar {
   width: 5px;
 }
 
-.messages-scroll::-webkit-scrollbar-track {
+.status-box.messages::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.messages-scroll::-webkit-scrollbar-thumb {
+.status-box.messages::-webkit-scrollbar-thumb {
   background: #c1c7d0;
   border-radius: 3px;
 }
 
-.messages-scroll::-webkit-scrollbar-thumb:hover {
+.status-box.messages::-webkit-scrollbar-thumb:hover {
   background: #a5adba;
 }
 
 .status-box.messages {
-  background-color: #fff4d2;
-  padding: 10px 12px;
-  margin-top: 6px;
-  font-family: Consolas, Monaco, monospace;
-  font-size: 13px;
-  line-height: 1.45;
-  color: #222;
-  border-radius: 4px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+  scrollbar-width: thin;
+  scrollbar-color: #c1c7d0 transparent;
 }
 
+/* Utility */
 .hidden {
   display: none !important;
 }
