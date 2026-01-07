@@ -1,26 +1,25 @@
-/* Root wrapper */
+
 .scroll-wrapper {
   background: white;
   padding: 0;
   margin: 0;
+  min-height: 260px;     
   overflow: visible;
 }
 
-/* Header (buttons) — already sticky */
 .status-box.header {
   background-color: #fff4d2;
   padding: 8px 10px;
   font-weight: bold;
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 30;
   display: flex;
   gap: 8px;
   align-items: center;
-  border-radius: 4px;
+  border-bottom: 1px solid #e2e4e9;
 }
 
-/* Buttons */
 button {
   padding: 5px 12px;
   background: #0052cc;
@@ -41,22 +40,19 @@ button:disabled {
   opacity: 0.75;
 }
 
-/* Progress bar container — NOW STICKY */
 #progress-container {
   position: sticky;
-  top: 44px; /* height of header */
-  z-index: 9;
+  top: 44px; /* MUST match header height */
+  z-index: 25;
   width: 100%;
-  background: #eee;
-  height: 16px;
-  border-radius: 6px;
-  margin: 6px 0;
+  background: #fff4d2;
+  padding: 4px 0;
+  border-bottom: 1px solid #e2e4e9;
 }
 
-/* Progress bar */
 #progress-bar {
-  height: 16px;
-  line-height: 16px;
+  height: 14px;
+  line-height: 14px;
   font-size: 11px;
   text-align: center;
   color: white;
@@ -64,32 +60,28 @@ button:disabled {
   border-radius: 6px;
   width: 0%;
 }
-
-/* Message boxes */
 .status-box.messages {
   background-color: #fff4d2;
   padding: 10px 12px;
   font-size: 13px;
   line-height: 1.45;
-  margin-top: 6px;
+  margin-top: 8px;
   font-family: Consolas, Monaco, monospace;
   color: #222;
   border-radius: 4px;
   box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  position: relative;
+  z-index: 1;
 }
 
-/* Per-message scrolling (ONLY when needed) */
 .scrollable {
-  max-height: 140px;
+  max-height: 120px;        /* adjust if needed */
   overflow-y: auto;
   white-space: pre-wrap;
-
-  /* Firefox */
   scrollbar-width: thin;
   scrollbar-color: #c1c7d0 transparent;
 }
 
-/* Chrome / Edge / Safari scrollbar */
 .scrollable::-webkit-scrollbar {
   width: 5px;
 }
@@ -106,8 +98,6 @@ button:disabled {
 .scrollable::-webkit-scrollbar-thumb:hover {
   background: #a5adba;
 }
-
-/* Utility */
 .hidden {
   display: none !important;
 }
