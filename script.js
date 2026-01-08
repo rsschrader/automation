@@ -15,13 +15,18 @@ async function attachScriptRunnerButtonListener() {
   //const issueType = "TestPlan"; 
   const typeUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/type?JiraIssueKey=${issueKey}&FullError=false`;
   fetchWithTimeout(typeUrl, 300000)
-    .then((response) => {
+      .then((response) => {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         return response.json();
-    })
-    .then((data) => {
-        issueType1 = (data.fields?.issuetype?.name || "").replace(/ /g, "");  
-    }
+      })
+      .then((data) => {
+        const issueTypeFromApi = (data.fields?.issuetype?.name || "").replace(/ /g, "");
+        console.log("Resolved IssueType:", issueTypeFromApi);
+      })
+      .catch(err => {
+        console.error("Type fetch failed:", err);
+      });
+
   //temporary replacement for switch(issuetype) 
   statusButton.innerText = "Run Status";
   runButton.innerText = issueType === "TestPlan" ? "Run TestPlan TestExecutions" : "Run TestExecution XrayTests";
