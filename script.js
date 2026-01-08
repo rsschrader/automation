@@ -13,6 +13,8 @@ async function attachScriptRunnerButtonListener() {
   const issueKey = getIssueKeyFromUrl();
   const issueType = "TestExecution";  
   //const issueType = "TestPlan"; 
+  const typeResponce = await fetchWithTimeout("https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/type?JiraIssueKey=${issueKey}&FullError=false", 300000);
+  const typeData = await typeResponce.json();
   const typeUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/type?JiraIssueKey=${issueKey}&FullError=false`;
   fetchWithTimeout(typeUrl, 300000)
       .then((response) => {
