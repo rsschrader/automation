@@ -20,7 +20,7 @@ async function attachScriptRunnerButtonListener() {
         return response.json();
     })
     .then((data) => {
-        issueType = (data.fields?.issuetype?.name || "").replace(/ /g, "");  
+        issueType1 = (data.fields?.issuetype?.name || "").replace(/ /g, "");  
     }
   //temporary replacement for switch(issuetype) 
   statusButton.innerText = "Run Status";
@@ -82,6 +82,11 @@ async function attachScriptRunnerButtonListener() {
     progressContainer.classList.remove("hidden");
     progressBar.style.width = pct + "%";
     progressBar.innerText = pct + "%";
+  }
+  function fetchWithTimeout(url, timeout) {
+      const controller = new AbortController();
+      const tid = setTimeout(() => controller.abort(), timeout);
+      return fetch(url, { method: "GET", signal: controller.signal }).finally(() => clearTimeout(tid));
   }
 }
  
