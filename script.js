@@ -43,7 +43,7 @@ async function attachScriptRunnerButtonListener() {
     
   const typeResponce = await fetchWithTimeout(`https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/type?JiraIssueKey=${issueKey}&FullError=false`, 300000);
   const typeData = await typeResponce.json();
-  const issueTypeFromApi = (data.fields?.issuetype?.name || "").replace(/ /g, "");
+  const issueTypeFromApi = (typeData.fields?.issuetype?.name || "").replace(/ /g, "");
   console.log("Resolved IssueType:", issueTypeFromApi);
 
   //temporary replacement for switch(issuetype) 
