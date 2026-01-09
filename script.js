@@ -12,45 +12,52 @@ async function attachScriptRunnerButtonListener() {
   const progressBar = document.getElementById("progress-bar");
   const issueKey = getIssueKeyFromUrl();
   let issueType = ""; let sourceInfo = "";
-   try {
-		const ipResponce = await fetchWithTimeout("https://api.ipify.org?format=json", 5000);
-		if (!ipResponce.ok) throw new Error(`IP API failed: ${ipResponce.status}`);
-		const ipData = await ipResponce.json();
-		const sourceIp = ipData?.ip;
-		if (!sourceIp) throw new Error("No IP address returned");
-		const orgResponce = await fetchWithTimeout(`https://ipinfo.io/${sourceIp}/org`, 5000);
-		if (!orgResponce.ok) throw new Error(`Org API failed: ${orgResponce.status}`);
-		const sourceOrg = await orgResponce.text();
-		sourceInfo = `IP: ${sourceIp} - Org: ${sourceOrg}`;
-	} catch (error) {
-		console.error("Error fetching IP or Org:", error);
-		sourceInfo = `IP: ***.***.***.*** - Org: Not Available`
-	}
-
-	try {
-		const pingResp = await fetchWithTimeout(`https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/ping?SourceInfo=${sourceInfo}`, 5000);
-		if (!pingResp.ok) throw new Error(`HTTP ${pingResp.status}`);
-		const pingData = await pingResp.json();
-	} catch (error) {
-		console.error("Caught error during initial /ping:", error);
-		await sleep(2000); messageBox.innerText =
-		error.message === "Failed to fetch"
+  try {
+	  const ipResponce = await fetchWithTimeout("https://api.ipify.org?format=json", 5000);
+	  if (!ipResponce.ok) throw new Error(`IP API failed: ${ipResponce.status}`);
+	  const ipData = await ipResponce.json();
+	  const sourceIp = ipData?.ip;
+	  if (!sourceIp) throw new Error("No IP address returned");
+	  const orgResponce = await fetchWithTimeout(`https://ipinfo.io/${sourceIp}/org`, 5000);
+   	  if (!orgResponce.ok) throw new Error(`Org API failed: ${orgResponce.status}`);
+	  const sourceOrg = await orgResponce.text();
+	  sourceInfo = `IP: ${sourceIp} - Org: ${sourceOrg}`;
+  }catch (error) {
+	  console.error("Error fetching IP or Org:", error);
+	  sourceInfo = `IP: ***.***.***.*** - Org: Not Available`
+  }
+  try {
+	  const pingResp = await fetchWithTimeout(`https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/ping?SourceInfo=${sourceInfo}`, 5000);
+	  if (!pingResp.ok) throw new Error(`HTTP ${pingResp.status}`);
+	  const pingData = await pingResp.json();	  
+  } catch (error) {
+	  console.error("Caught error during initial /ping:", error);
+	  await sleep(2000); messageBox.innerText =
+	  error.message === "Failed to fetch"
 			? "Test Automation is accessible only from the corporate network. (on-site or via VPN)"
 			: "Test Automation Service is Offline: Please contact SVT Admin group";
-	}
-    
-  const typeResponce = await fetchWithTimeout(`https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/type?JiraIssueKey=${issueKey}&FullError=false`, 300000);
-  const typeData = await typeResponce.json();
-  issueType = (typeData.fields?.issuetype?.name || "").replace(/ /g, "");
-  console.log("Resolved IssueType:", issueType);
-
-  //temporary replacement for switch(issuetype) 
-  statusButton.innerText = "Run Status";
-  runButton.innerText = issueType === "TestPlan" ? "Run TestPlan TestExecutions" : "Run TestExecution XrayTests";
- 
-  box1.classList.remove("hidden");
-  box1.innerText = "Test Automation Service is Online";
- 
+  }
+  try {
+	  const typeResponce = await fetchWithTimeout(`https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/type?JiraIssueKey=${issueKey}&FullError=false`, 300000);
+  	  const typeData = await typeResponce.json();
+  	  issueType = (typeData.fields?.issuetype?.name || "").replace(/ /g, "");
+  	  console.log("Resolved IssueType:", issueType);
+  } catch (error) {
+	  error.message === "Failed to fetch"
+			? "issuetype not fetched"
+			: "Test Automation Service is Offline: Please contact SVT Admin group";
+  }
+  
+  switch (issueType) {
+		  case "TestPlan":
+                runButton.innerText = "Run TestPlan TestExecutions";
+                messageBox.innerText = "Test Automation Service is Online"; break;   
+      	  case "TestExecution":
+                runButton.innerText = "Run TestExecution XrayTests"; 
+                messageBox.innerText = "Test Automation Service is Online"; break;
+          default:
+                messageBox.innerText = "Test Automation is accessible only from TestPlans or TestExecutions";
+  }
   statusButton.addEventListener("click", () => {
     runButton.disabled = true;
     setProgress(0);
