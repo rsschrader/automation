@@ -43,19 +43,8 @@ async function attachScriptRunnerButtonListener() {
     
   const typeResponce = await fetchWithTimeout(`https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/type?JiraIssueKey=${issueKey}&FullError=false`, 300000);
   const typeData = await typeResponce.json();
-  const typeUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/type?JiraIssueKey=${issueKey}&FullError=false`;
-  fetchWithTimeout(typeUrl, 300000)
-      .then((response) => {
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        return response.json();
-      })
-      .then((data) => {
-        const issueTypeFromApi = (data.fields?.issuetype?.name || "").replace(/ /g, "");
-        console.log("Resolved IssueType:", issueTypeFromApi);
-      })
-      .catch(err => {
-        console.error("Type fetch failed:", err);
-      });
+  const issueTypeFromApi = (data.fields?.issuetype?.name || "").replace(/ /g, "");
+  console.log("Resolved IssueType:", issueTypeFromApi);
 
   //temporary replacement for switch(issuetype) 
   statusButton.innerText = "Run Status";
