@@ -13,7 +13,7 @@ async function attachScriptRunnerButtonListener() {
   const panelRoot = document.querySelector(".scroll-wrapper");
   const issueKey = getIssueKeyFromUrl();
   let issueType = ""; let sourceInfo = "";
-  hideRow(panelRoot, [statusButton, runButton]);
+  //hideRow(panelRoot, [statusButton, runButton]);
   try {
 	  const ipResponce = await fetchWithTimeout("https://api.ipify.org?format=json", 5000);
 	  if (!ipResponce.ok) throw new Error(`IP API failed: ${ipResponce.status}`);
