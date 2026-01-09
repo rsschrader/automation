@@ -51,12 +51,15 @@ async function attachScriptRunnerButtonListener() {
   switch (issueType) {
 		  case "TestPlan":
                 runButton.innerText = "Run TestPlan TestExecutions";
-                messageBox.innerText = "Test Automation Service is Online"; break;   
+		  		box1.classList.remove("hidden");
+                box1.innerText = "Test Automation Service is Online"; break;   
       	  case "TestExecution":
                 runButton.innerText = "Run TestExecution XrayTests"; 
-                messageBox.innerText = "Test Automation Service is Online"; break;
+		  		box1.classList.remove("hidden");
+                box1.innerText = "Test Automation Service is Online"; break;
           default:
-                messageBox.innerText = "Test Automation is accessible only from TestPlans or TestExecutions";
+		  		box1.classList.remove("hidden");
+                box1.innerText = "Test Automation is accessible only from TestPlans or TestExecutions";
   }
   statusButton.addEventListener("click", () => {
     runButton.disabled = true;
