@@ -2,6 +2,9 @@ function getIssueKeyFromUrl() {
     const match = window.location.pathname.match(/([A-Z]+-\d+)/);
     return match ? match[1] : null;
 }
+function toQueryParam(s) {
+    return encodeURIComponent(String(s ?? ""));
+}
 async function attachScriptRunnerButtonListener() {
   const statusButton = document.getElementById("run-status-button");
   const runButton    = document.getElementById("run-dynamic-button");
