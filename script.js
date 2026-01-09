@@ -11,8 +11,7 @@ async function attachScriptRunnerButtonListener() {
   const progressContainer = document.getElementById("progress-container");
   const progressBar = document.getElementById("progress-bar");
   const issueKey = getIssueKeyFromUrl();
-  const issueType = "TestExecution";  
-  //const issueType = "TestPlan"; 
+  let issueType = ""; let sourceInfo = "";
    try {
 		const ipResponce = await fetchWithTimeout("https://api.ipify.org?format=json", 5000);
 		if (!ipResponce.ok) throw new Error(`IP API failed: ${ipResponce.status}`);
@@ -38,13 +37,12 @@ async function attachScriptRunnerButtonListener() {
 		error.message === "Failed to fetch"
 			? "Test Automation is accessible only from the corporate network. (on-site or via VPN)"
 			: "Test Automation Service is Offline: Please contact SVT Admin group";
-		return; 
 	}
     
   const typeResponce = await fetchWithTimeout(`https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/type?JiraIssueKey=${issueKey}&FullError=false`, 300000);
   const typeData = await typeResponce.json();
-  const issueTypeFromApi = (typeData.fields?.issuetype?.name || "").replace(/ /g, "");
-  console.log("Resolved IssueType:", issueTypeFromApi);
+  issueType = (typeData.fields?.issuetype?.name || "").replace(/ /g, "");
+  console.log("Resolved IssueType:", issueType);
 
   //temporary replacement for switch(issuetype) 
   statusButton.innerText = "Run Status";
