@@ -13,6 +13,34 @@ async function attachScriptRunnerButtonListener() {
   const issueKey = getIssueKeyFromUrl();
   const issueType = "TestExecution";  
   //const issueType = "TestPlan"; 
+   try {
+		const ipResponce = await fetchWithTimeout("https://api.ipify.org?format=json", 5000);
+		if (!ipResponce.ok) throw new Error(`IP API failed: ${ipResponce.status}`);
+		const ipData = await ipResponce.json();
+		const sourceIp = ipData?.ip;
+		if (!sourceIp) throw new Error("No IP address returned");
+		const orgResponce = await fetchWithTimeout(`https://ipinfo.io/${sourceIp}/org`, 5000);
+		if (!orgResponce.ok) throw new Error(`Org API failed: ${orgResponce.status}`);
+		const sourceOrg = await orgResponce.text();
+		sourceInfo = `IP: ${sourceIp} - Org: ${sourceOrg}`;
+	} catch (error) {
+		console.error("Error fetching IP or Org:", error);
+		sourceInfo = `IP: ***.***.***.*** - Org: Not Available`
+	}
+
+	try {
+		const pingResp = await fetchWithTimeout(`https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/ping?SourceInfo=${sourceInfo}`, 5000);
+		if (!pingResp.ok) throw new Error(`HTTP ${pingResp.status}`);
+		const pingData = await pingResp.json();
+	} catch (error) {
+		console.error("Caught error during initial /ping:", error);
+		await sleep(2000); messageBox.innerText =
+		error.message === "Failed to fetch"
+			? "Test Automation is accessible only from the corporate network. (on-site or via VPN)"
+			: "Test Automation Service is Offline: Please contact SVT Admin group";
+		return; 
+	}
+    
   const typeResponce = await fetchWithTimeout(`https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/type?JiraIssueKey=${issueKey}&FullError=false`, 300000);
   const typeData = await typeResponce.json();
   const typeUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/type?JiraIssueKey=${issueKey}&FullError=false`;
