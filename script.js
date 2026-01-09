@@ -12,6 +12,21 @@ async function attachScriptRunnerButtonListener() {
   const progressBar = document.getElementById("progress-bar");
   const issueKey = getIssueKeyFromUrl();
   const issueType = "TestExecution";  
+  try {
+    const pingUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/ping?SourceInfo=${toQueryParam(sourceInfo)}`;
+    const pingResp = await fetchWithTimeout(pingUrl, 5000);
+    if (!pingResp.ok) throw new Error(`HTTP ${pingResp.status}`);
+    await pingResp.json().catch(() => null);
+  } catch (error) {
+    console.error("Caught error during initial /ping:", error);
+    await sleep(2000);
+    messageBox.innerText =
+      error.message === "Failed to fetch"
+        ? "Test Automation is accessible only from the corporate network. (on-site or via VPN)"
+        : "Test Automation Service is Offline: Please contact SVT Admin group";
+    return;
+  }
+
   //const issueType = "TestPlan"; 
   const typeResponce = await fetchWithTimeout(`https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/type?JiraIssueKey=${issueKey}&FullError=false`, 300000);
   const typeData = await typeResponce.json();
