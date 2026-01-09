@@ -15,6 +15,24 @@ async function attachScriptRunnerButtonListener() {
   const progressBar = document.getElementById("progress-bar");
   const issueKey = getIssueKeyFromUrl();
   const issueType = "TestExecution";  
+
+  try {
+    const ipResponce = await fetchWithTimeout("https://api.ipify.org?format=json", 5000);
+    if (!ipResponce.ok) throw new Error(`IP API failed: ${ipResponce.status}`);
+    const ipData = await ipResponce.json();
+    const sourceIp = ipData?.ip;
+    if (!sourceIp) throw new Error("No IP address returned");
+
+    const orgResponce = await fetchWithTimeout(`https://ipinfo.io/${sourceIp}/org`, 5000);
+    if (!orgResponce.ok) throw new Error(`Org API failed: ${orgResponce.status}`);
+    const sourceOrg = await orgResponce.text();
+
+    sourceInfo = `IP: ${sourceIp} - Org: ${sourceOrg}`;
+  } catch (error) {
+    console.error("Error fetching IP or Org:", error);
+    sourceInfo = "IP: ***.***.***.*** - Org: Not Available";
+  }
+    
   try {
     const pingUrl = `https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/ping?SourceInfo=${toQueryParam(sourceInfo)}`;
     const pingResp = await fetchWithTimeout(pingUrl, 5000);
