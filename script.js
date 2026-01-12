@@ -12,7 +12,7 @@ async function attachScriptRunnerButtonListener() {
   const progressBar = document.getElementById("progress-bar");
   const panelRoot = document.querySelector(".scroll-wrapper");
   const issueKey = getIssueKeyFromUrl();
-  let issueType = ""; let sourceInfo = "";
+  const issueType = "TestExecution"; let sourceInfo = "";
   //hideRow(panelRoot, [statusButton, runButton]);
   try {
 	  const ipResponce = await fetchWithTimeout("https://api.ipify.org?format=json", 5000);
@@ -42,8 +42,8 @@ async function attachScriptRunnerButtonListener() {
   try {
 	  const typeResponce = await fetchWithTimeout(`https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/jira/type?JiraIssueKey=${issueKey}&FullError=false`, 300000);
   	  const typeData = await typeResponce.json();
-  	  issueType = (typeData.fields?.issuetype?.name || "").replace(/ /g, "");
-  	  console.log("Resolved IssueType:", issueType);
+  	  const issueType1 = (typeData.fields?.issuetype?.name || "").replace(/ /g, "");
+  	  console.log("Resolved IssueType:", issueType1);
   } catch (error) {
 	  error.message === "Failed to fetch"
 			? "issuetype not fetched"
