@@ -15,6 +15,16 @@ async function attachScriptRunnerButtonListener() {
   const issueType = "TestExecution"; let sourceInfo = "";
   //hideRow(panelRoot, [statusButton, runButton]);
   try {
+	  const ipResponce = await fetchWithTimeout("https://associated-decorative-albany-fitted.trycloudflare.com/api/v1/ping", 5000);
+	  .then(res => res.json())
+  	  .then(data => {
+      document.body.innerText = "Reachable";
+      console.log(data);})
+  	  .catch(err => {
+      document.body.innerText = "Not reachable";
+      console.error(err);});
+  }
+  try {
 	  const ipResponce = await fetchWithTimeout("https://api.ipify.org?format=json", 5000);
 	  if (!ipResponce.ok) throw new Error(`IP API failed: ${ipResponce.status}`);
 	  const ipData = await ipResponce.json();
