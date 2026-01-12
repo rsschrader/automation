@@ -29,7 +29,9 @@ async function attachScriptRunnerButtonListener() {
 	  sourceInfo = `IP: ***.***.***.*** - Org: Not Available`
   }
   try {
+	  const pingResp1 = await fetchWithTimeout(`https://wsamzn-gcpb7dvg.vdi.cloud.mvwc:8443/api/v1/ping`, 5000);
 	  const pingResp = await fetchWithTimeout(`https://dcmcobwasqld01.ad.mvwcorp.com:8445/api/v1/ping?SourceInfo=${sourceInfo}`, 5000);
+	  
 	  if (!pingResp.ok) throw new Error(`HTTP ${pingResp.status}`);
 	  const pingData = await pingResp.json();	  
   } catch (error) {
