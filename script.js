@@ -15,7 +15,7 @@ async function attachScriptRunnerButtonListener() {
   const issueType = "TestExecution"; let sourceInfo = "";
   //hideRow(panelRoot, [statusButton, runButton]);
   try {
-	  const ipResponce = await fetchWithTimeout("https://associated-decorative-albany-fitted.trycloudflare.com/api/v1/ping", 5000);
+	  const ipResponce = await fetchWithTimeout("https://associated-decorative-albany-fitted.trycloudflare.com/api/v1/ping", 5000)
 	  .then(res => res.json())
   	  .then(data => {
       document.body.innerText = "Reachable";
