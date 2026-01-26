@@ -2,8 +2,8 @@
   background: white;
   padding: 0;
   margin: 0;
-  max-height: 320px;
-  overflow-y: auto;
+  #min-height: 260px;     
+  overflow: visible;
 }
 
 .status-box.header {
@@ -41,7 +41,7 @@ button:disabled {
 
 #progress-container {
   position: sticky;
-  top: 44px; /* MUST match header height */
+  top: 44px; 
   z-index: 25;
   width: 100%;
   background: #fff4d2;
@@ -59,6 +59,7 @@ button:disabled {
   border-radius: 6px;
   width: 0%;
 }
+
 .status-box.messages {
   background-color: #fff4d2;
   padding: 10px 12px;
@@ -74,9 +75,8 @@ button:disabled {
 }
 
 .scrollable {
-  max-height: 180px;        /* increase height if needed */
-  overflow-y: auto;     
-  overflow-x: hidden;
+  max-height: 120px;      
+  overflow-y: auto;
   white-space: pre-wrap;
   scrollbar-width: thin;
   scrollbar-color: #c1c7d0 transparent;
@@ -98,6 +98,7 @@ button:disabled {
 .scrollable::-webkit-scrollbar-thumb:hover {
   background: #a5adba;
 }
+
 .hidden {
   display: none !important;
 }
