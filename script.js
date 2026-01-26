@@ -84,7 +84,7 @@ async function attachScriptRunnerButtonListener() {
   }
 
   statusButton.addEventListener("click", () => {
-    runButton.disabled = true;
+    runButton.disabled = false;
     setProgress(0);
 
     box.classList.remove("hidden");
