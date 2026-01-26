@@ -79,6 +79,7 @@ async function attachScriptRunnerButtonListener() {
       break;
 
     default:
+      showRow(panelRoot, [statusButton, runButton]);
       box.classList.remove("hidden");
       box.innerText = "Test Automation is accessible only from TestPlans or TestExecutions";
   }
