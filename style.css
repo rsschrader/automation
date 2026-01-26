@@ -74,8 +74,9 @@ button:disabled {
 }
 
 .scrollable {
-  max-height: 120px;        /* adjust if needed */
-  overflow-y: auto;
+  max-height: 180px;        /* increase height if needed */
+  overflow-y: auto;     
+  overflow-x: hidden;
   white-space: pre-wrap;
   scrollbar-width: thin;
   scrollbar-color: #c1c7d0 transparent;
