@@ -5,9 +5,7 @@ function getIssueKeyFromUrl() {
 async function attachScriptRunnerButtonListener() {
   const statusButton = document.getElementById("run-status-button");
   const runButton    = document.getElementById("run-dynamic-button");
-  const box1 = document.getElementById("status-box-1");
-  const box2 = document.getElementById("status-box-2");
-  const box3 = document.getElementById("status-box-3");
+  const box = document.getElementById("status-box");
   const progressContainer = document.getElementById("progress-container");
   const progressBar = document.getElementById("progress-bar");
   const panelRoot = document.querySelector(".scroll-wrapper");
@@ -67,26 +65,22 @@ async function attachScriptRunnerButtonListener() {
 		  case "TestPlan":
                 runButton.innerText = "Run TestPlan TestExecutions";
 		  		showRow(panelRoot, [statusButton, runButton]);
-		  		box1.classList.remove("hidden");
-                box1.innerText = "Test Automation Service is Online"; break;   
+		  		box.classList.remove("hidden");
+                box.innerText = "Test Automation Service is Online"; break;   
       	  case "TestExecution":
                 runButton.innerText = "Run TestExecution XrayTests"; 
 		    	showRow(panelRoot, [statusButton, runButton]);
-		  		box1.classList.remove("hidden");
-                box1.innerText = "Test Automation Service is Online"; break;
+		  		box.classList.remove("hidden");
+                box.innerText = "Test Automation Service is Online"; break;
           default:
-		  		box1.classList.remove("hidden");
-                box1.innerText = "Test Automation is accessible only from TestPlans or TestExecutions";
+		  		box.classList.remove("hidden");
+                box.innerText = "Test Automation is accessible only from TestPlans or TestExecutions";
   }
   statusButton.addEventListener("click", () => {
     runButton.disabled = true;
     setProgress(0);
-    box1.classList.remove("hidden");
-    box2.classList.remove("hidden");
-    box3.classList.remove("hidden");
-    box1.innerText = `IssueKey = ${issueKey} IssueType = ${issueType}`;
-    box2.innerText = "";
-    box3.innerText = "";
+   box.classList.remove("hidden");
+   box.innerText = `IssueKey = ${issueKey} IssueType = ${issueType}\n\n`;
     const items = issueType === "TestPlan"
       ? [
           { execution: "QA-4", tests: 2 },
@@ -109,23 +103,20 @@ async function attachScriptRunnerButtonListener() {
  
       if (idx < items.length) {
         const item = items[idx++];
-        box2.innerText += issueType === "TestPlan" ? `Execution ${idx}: ${item.execution} running ${item.tests} tests...\n` : `Test ${idx}: ${item.test} - ${item.summary} running...\n`;
-        box2.scrollTop = box2.scrollHeight;
+        box.innerText += issueType === "TestPlan" ? `Execution ${idx}: ${item.execution} running ${item.tests} tests...\n`: `Test ${idx}: ${item.test} - ${item.summary} running...\n`;
+        box.scrollTop = box.scrollHeight;
       }
  
       if (pct === 100) {
         clearInterval(interval);
-        box2.innerText += "All finished!\n";
-        box3.innerText = `Final Fake Response:\n${JSON.stringify(items, null, 2)}`;
+        box.innerText += "\nAll finished!\n";
         runButton.disabled = false;
       }
     }, 700);
   });
  
   runButton.addEventListener("click", () => {
-    box1.innerText = `Run button clicked IssueKey = ${issueKey}`;
-    box2.innerText = "Ready to wire real /run logic";
-    box3.innerText = "Placeholder response";
+    box.innerText = `Run button clicked IssueKey = ${issueKey}\nReady to wire real /run logic`;
   });
   function setProgress(pct) {
     progressContainer.classList.remove("hidden");
